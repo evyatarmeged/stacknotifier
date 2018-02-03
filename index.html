@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tutorialzine Electron Experiment</title>
+</head>
+<body>
+    <div>
+       <p>Query Interval:
+           <script> let queryInterval = require('electron').remote.queryInterval;
+           if (!queryInterval) {
+           	process.stderr.write('123')
+           }
+             document.write(require('electron').remote.queryInterval)</script></p>
+    </div>
+<!--<script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>-->
+<script src="./js/script.js"></script>
+</body>
+</html>
