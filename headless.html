@@ -2,14 +2,42 @@
 <html>
 <head>
     <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
-    <script src="js/argVal.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>untitled</title>
 </head>
 <body>
-<script src="js/headless.js"></script>
+    <div id="query-interval"></div>
+    <div id="tags"></div>
+    <script>
+        let invalidQueryInterval = 'Invalid query interval parameter. Specify' +
+	        'a number between 0.5 and 60\r\n',
+          invalidTags = 'Specify tags with only spaces between them';
+
+        function invalidArguments(err) {
+	        process.stdout.write(err);
+	        window.close();
+	        process.exit(1)
+        }
+
+        let args = require('electron').remote.process.argv.slice(2),
+          queryInterval = args[0],
+          tags = args.slice(1);
+
+        if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
+        	invalidArguments(invalidQueryInterval)
+        }
+
+        tags.forEach((item) => {
+        	if (item.includes(',')) {
+        		invalidArguments(invalidTags)
+            }
+        })
+
+        $('#query-interval').text(queryInterval);
+        $('#tags').text(tags.join(' '))
+
+    </script>
+    <script src="js/headless.js"></script>
 </body>
 </html>
