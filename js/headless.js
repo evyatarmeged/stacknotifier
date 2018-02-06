@@ -1,39 +1,95 @@
-// Scraping, parsing & notifying logic goes here. Using jQuery AJAX requests (no CORS limitation). yay
+// bzz
 
 $(function() {
 
-	const BASE_URL = 'https://stackoverflow.com/questions/tagged/',
+	const BASE_URL = 'https://stackoverflow.com/',
 		SUFFIX = '?sort=newest&pageSize=15',
-		TAGS = $('#tags').text().split(' ').join('+'),
-		qryInterval = $('#query-interval').text(),
+		TAGS = 'questions/tagged/' + $('#tags').text().replace(/,/g, '+').toLowerCase(),
+		QRY_INTERVAL = $('#query-interval').text(),
 		URL = BASE_URL + TAGS + SUFFIX;
 
-	let newQuestions = new Set();
+	let queue = [];
 
-	function getNotifications() {
-		// (h3 > a).text() = question title
-		// (.user-details > a).text() = asker
-		// (.user-action-time > span).getAttribute(title) = timestamp
-		// OMMFG PROGRESS
+
+	function addToQueue(item) {
+		// Enforce max size on queue
+		if (queue.length === 15) {
+			queue.shift()
+		}
+		queue.push(item)
+	}
+
+	function timeStampComparison(a, b) {
+		const tsA = a.ts,
+			tsB = b.ts;
+
+		let comparison = 0;
+		if (tsA > tsB) {
+			comparison = 1;
+		} else if (tsB > tsA) {
+			comparison = -1;
+		}
+		return comparison;
+	}
+
+	function parseQuestions(page) {
+		let $page = $(page),
+			questions = $page.find('.question-summary');
+		$.each(questions, (index, item) => {
+			let $item = $(item),
+				title = $item.find('h3 > a').text(),
+				asker = $item.find('.user-details > a').text(),
+				url = BASE_URL + $item.find('.question-hyperlink').attr('href')
+				ts = Date.parse($item.find('.user-action-time > span').attr('title'));
+
+			let questionObj = {
+				title: title,
+				asker: asker,
+				url: url,
+				ts: ts
+			}
+
+			if (queue.includes(questionObj)) {
+				console.log('Question ' + questionObj.title + ' with time stamp ' + questionObj.ts + ' is in the queue')
+			} else {
+				console.log('not in q(???)')
+				queue.push(questionObj)
+			}
+		})
+
+		queue.sort(timeStampComparison)
+	}
+
+	isQuestionExists = () => {
+
+	}
+
+	replaceOldQuestions = () => {
+		// Out with the old in with the new
+	}
+
+	function getQuestionPage() {
+		// Life is good with no CORS
 
 		$.ajax({
 			type: 'GET',
 			url: URL,
-			success: (page) => {
-				console.log()
-				let questions = $(page).find('.question-summary');
-				$.each(questions, (index, item) => {
-					console.log($(item).find('h3 > a').text());
-				})
+			success: page => {
+				parseQuestions(page)
 			},
-			error: (err) => {
+			error: err => {
 				console.log(err)
 			}
 		})
 	}
 
-	getNotifications()
+	callAll = () => {
+		// Urgent: find a better name than "callAll" :<
+		getQuestionPage()
+		setTimeout(() => {
+			callAll()
+		}, QRY_INTERVAL)}
 
-
+	callAll()
 
 })

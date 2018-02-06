@@ -11,11 +11,11 @@
     <div id="tags"></div>
     <script>
         let invalidQueryInterval = 'Invalid query interval parameter. Specify' +
-	        'a number between 0.5 and 60\r\n',
+	        'a number between 0.5 and 60',
           invalidTags = 'Specify tags with only spaces between them';
 
         function invalidArguments(err) {
-	        process.stdout.write(err);
+	        process.stdout.write(err + '\r\n');
 	        window.close();
 	        process.exit(1)
         }
@@ -26,17 +26,17 @@
 
         if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
         	invalidArguments(invalidQueryInterval)
+        } else {
+	        $('#query-interval').text(queryInterval * 60000);
         }
 
         tags.forEach((item) => {
-        	if (item.includes(',')) {
+	        console.log(item)
+	        if (item.includes(',')) {
         		invalidArguments(invalidTags)
             }
         })
-
-        $('#query-interval').text(queryInterval);
-        $('#tags').text(tags.join(' '))
-
+        $('#tags').text(tags)
     </script>
     <script src="js/headless.js"></script>
 </body>
