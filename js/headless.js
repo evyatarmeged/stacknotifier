@@ -11,7 +11,7 @@ $(function() {
 	let queue = [];
 
 
-	function addToQueue(item) {
+	const addToQueue = item => {
 		// Enforce max size on queue
 		if (queue.length === 15) {
 			queue.shift()
@@ -19,7 +19,7 @@ $(function() {
 		queue.push(item)
 	}
 
-	function timeStampComparison(a, b) {
+	const timeStampComparison = (a, b) => {
 		const tsA = a.ts,
 			tsB = b.ts;
 
@@ -32,7 +32,7 @@ $(function() {
 		return comparison;
 	}
 
-	function parseQuestions(page) {
+	const parseQuestions = page => {
 		let $page = $(page),
 			questions = $page.find('.question-summary');
 		$.each(questions, (index, item) => {
@@ -60,15 +60,15 @@ $(function() {
 		queue.sort(timeStampComparison)
 	}
 
-	isQuestionExists = () => {
+	const isQuestionExists = () => {
 
 	}
 
-	replaceOldQuestions = () => {
+	const replaceOldQuestions = () => {
 		// Out with the old in with the new
 	}
 
-	function getQuestionPage() {
+	const getQuestionPage = () => {
 		// Life is good with no CORS
 
 		$.ajax({
@@ -83,7 +83,7 @@ $(function() {
 		})
 	}
 
-	callAll = () => {
+	const callAll = () => {
 		// Urgent: find a better name than "callAll" :<
 		getQuestionPage()
 		setTimeout(() => {
