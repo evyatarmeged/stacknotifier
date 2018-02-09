@@ -10,34 +10,47 @@
     <div id="query-interval"></div>
     <div id="tags"></div>
     <script>
-        let invalidQueryInterval = 'Invalid query interval parameter. Specify' +
-	        'a number between 0.5 and 60',
-          invalidTags = 'Specify tags with only spaces between them';
 
-        function invalidArguments(err) {
+	    const args = require('electron').remote.process.argv,
+            program = require('commander'),
+            invalidQueryInterval = 'Invalid query interval parameter. Specify' +
+	        'a number between 0.5 and 60',
+            invalidTags = 'Specify tags with only spaces between them';
+
+        const invalidArguments = err => {
 	        process.stdout.write(err + '\r\n');
 	        window.close();
 	        process.exit(1)
         }
 
-        let args = require('electron').remote.process.argv.slice(2),
-          queryInterval = args[0],
-          tags = args.slice(1);
+        const tagList = val => val.split(',');
+
+        program
+            .version('0.1.0')
+            .option('-i, --interval <n>', 'Interval to query Stackoverflow for new questions')
+            .option('-t, --tags <tags>', 'Tags to filter questions by', tagList, '')
+            .parse(args);
+
+
+        const queryInterval = program.interval,
+          tags = program.tags
 
         if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
         	invalidArguments(invalidQueryInterval)
         } else {
-	        $('#query-interval').text(queryInterval * 60000);
+           $('#query-interval').text(queryInterval * 60000);
         }
 
         tags.forEach((item) => {
-	        console.log(item)
-	        if (item.includes(',')) {
+           if (item.includes(',')) {
         		invalidArguments(invalidTags)
             }
         })
+
         $('#tags').text(tags)
+
     </script>
-    <script src="js/headless.js"></script>
+    <img src="sof.png" hidden>
+    <script src="js/inquirer.js"></script>
 </body>
 </html>
