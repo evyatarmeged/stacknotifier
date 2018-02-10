@@ -9,9 +9,8 @@
   "author": "evya",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.14.1"
-  },
-  "devDependencies": {
-    "electron": "1.7.12"
+    "commander": "^2.14.1",
+    "electron": "^1.8.2",
+    "open": "0.0.5"
   }
 }

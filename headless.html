@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>untitled</title>
 </head>
 <body>
-    <div id="query-interval"></div>
-    <div id="tags"></div>
+    <!-- This is how you load jQuery in Electron -->
+    <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
+
+    <div id="query-interval" hidden></div>
+    <div id="tags" hidden></div>
     <script>
 
 	    const args = require('electron').remote.process.argv,
