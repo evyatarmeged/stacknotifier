@@ -19,6 +19,7 @@ const sortByTimeStamp = (a,b) => {
 	return 0;
 }
 
+
 const addToQueue = element => {
 	// Enforce max size on queue
 	if (queue.length === 15) {
@@ -44,10 +45,6 @@ const isQuestionExists = (arr, questionObj) => {
 }
 
 
-const compare = (a, b) => {
-	return a.title === b.title && a.ts === b.ts
-}
-
 const parseQuestionToObject = item => {
 	let $item = $(item);
 	return {
@@ -69,6 +66,7 @@ $(function() {
 
 			$.each(questions, (_, item) => {
 				let questionObj = parseQuestionToObject(item);
+				// First run to collect base case data to compare against
 				if (queue.length !== 15) {
 					queue.push(questionObj)
 				} else if (isQuestionExists(queue, questionObj)) {
@@ -76,6 +74,7 @@ $(function() {
 					newQuestionsCount++;
 				}
 			})
+			queue.sort(sortByTimeStamp)
 			// TODO: Test new isQuestionExist to see if accurate ts' are being used
 			resolve(newQuestionsCount);
 		})
