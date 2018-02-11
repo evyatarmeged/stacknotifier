@@ -19,12 +19,12 @@ const sortByTimeStamp = (a,b) => {
 	return 0;
 }
 
-const addToQueue = item => {
+const addToQueue = element => {
 	// Enforce max size on queue
 	if (queue.length === 15) {
 		queue.pop()
 	}
-	queue.unshift(item)
+	queue.unshift(element)
 }
 
 
@@ -37,73 +37,48 @@ const getDateTimeFromTimestamp = unixTimeStamp => {
 		('0' + date.getMinutes()).slice(-2);
 }
 
-const isQuestionExists = questionObj => {
-	let exists = false,
-		index = 0;
-	while (!exists && index < queue.length) {
-		let current = queue[index];
-		exists = compare(questionObj, current)
-		index ++;
-	}
-	return exists;
+
+const isQuestionExists = (arr, questionObj) => {
+	let result = arr.find(element => element.ts === questionObj.ts);
+	return result !== undefined && result.title === questionObj.title;
 }
+
 
 const compare = (a, b) => {
 	return a.title === b.title && a.ts === b.ts
 }
 
+const parseQuestionToObject = item => {
+	let $item = $(item);
+	return {
+		title: $item.find('h3 > a').text(),
+		asker: $item.find('.user-details > a').text(),
+		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
+		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
+	}
+}
 
 // Flow
 $(function() {
 
+	function getNewBatch(page) {
+		return new Promise((resolve, reject) => {
+			let $page = $(page),
+				questions = $page.find('.question-summary'),
+				newQuestionsCount = 0;
 
-	async function parseQuestions(page) {
-		let $page = $(page),
-			questions = $page.find('.question-summary'),
-			newQuestions = [],
-			newQuesCount = 0;
-
-		$.each(questions, (index, item) => {
-			let $item = $(item),
-				title = $item.find('h3 > a').text(),
-				asker = $item.find('.user-details > a').text(),
-				url = baseUrl + $item.find('.question-hyperlink').attr('href'),
-				ts = Date.parse($item.find('.user-action-time > span').attr('title'));
-
-			let questionObj = {
-				title: title,
-				asker: asker,
-				url: url,
-				ts: ts
-			}
-
-			if (queue.length !== 15) {
-				queue.push(questionObj)
-			} else {
-				newQuestions.push(questionObj);
-				if (!isQuestionExists(questionObj)) {
-					newQuesCount ++;
+			$.each(questions, (_, item) => {
+				let questionObj = parseQuestionToObject(item);
+				if (queue.length !== 15) {
+					queue.push(questionObj)
+				} else if (isQuestionExists(queue, questionObj)) {
+					addToQueue(questionObj);
+					newQuestionsCount++;
 				}
-			}
+			})
+			// TODO: Test new isQuestionExist to see if accurate ts' are being used
+			resolve(newQuestionsCount);
 		})
-
-		// TODO: Fix questions not being in the right order (newest -> oldest) after 1st run
-		// queue.sort(sortByTimeStamp)
-
-		// if (newQuestions.length !== 0) {
-		// 	newQuestions.reverse().forEach((obj) => {
-		// 		addToQueue(obj)
-		// 	})
-
-			// queue.forEach((item) => {
-			// 	console.log(getDateTimeFromTimestamp(item.ts))
-			// })
-		// }
-		if (newQuestions === 15) {
-			queue = newQuestions;
-		}
-		console.log(newQuesCount);
-		return newQuesCount;
 	}
 
 	const getQuestionPage = () => {
@@ -113,9 +88,13 @@ $(function() {
 			type: 'GET',
 			url: completeUrl,
 			success: page => {
-				parseQuestions(page)
-					.then((newQuesCount) => {
-						notifier.notify(newQuesCount, queue)
+				getNewBatch(page)
+					.then(() => {
+						console.log(queue)
+						queue.forEach((el) => {
+							console.log(getDateTimeFromTimestamp(el.ts))
+						})
+						// notifier.notify(newQuesCount, queue)
 					})
 					.catch((err) => {
 						console.error(err)
@@ -132,7 +111,7 @@ $(function() {
 		getQuestionPage()
 		setTimeout(() => {
 			callAll()
-		}, 20000)}
+		}, 120000)}
 
 
 	callAll()
