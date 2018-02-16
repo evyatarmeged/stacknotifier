@@ -12,7 +12,7 @@ module.exports = {
 				// Scrape body too ?
 				// body: question[0].title + '\r\n\r\n' + 'Asked by: ' + question[0].asker,
 				icon: 'sof.png'
-			})
+			});
 
 			notif.onclick = function(event) {
 				// Is there a default ?
@@ -22,4 +22,4 @@ module.exports = {
 	},
 	notifyAll: function() {
 	}
-}
+};

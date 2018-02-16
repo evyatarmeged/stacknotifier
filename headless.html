@@ -23,7 +23,7 @@
 	        process.stdout.write(err + '\r\n');
 	        window.close();
 	        process.exit(1)
-        }
+        };
 
         const tagList = val => val.split(',');
 
@@ -35,7 +35,7 @@
 
 
         const queryInterval = program.interval,
-          tags = program.tags
+          tags = program.tags;
 
         if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
         	invalidArguments(invalidQueryInterval)
@@ -47,7 +47,7 @@
            if (item.includes(',')) {
         		invalidArguments(invalidTags)
             }
-        })
+        });
 
         $('#tags').text(tags)
 

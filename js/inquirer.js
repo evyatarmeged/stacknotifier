@@ -17,7 +17,7 @@ const sortByTimeStamp = (a,b) => {
 	if (a.ts > b.ts)
 		return -1;
 	return 0;
-}
+};
 
 
 const addToQueue = element => {
@@ -26,7 +26,7 @@ const addToQueue = element => {
 		queue.pop()
 	}
 	queue.unshift(element)
-}
+};
 
 
 const getDateTimeFromTimestamp = unixTimeStamp => {
@@ -36,13 +36,13 @@ const getDateTimeFromTimestamp = unixTimeStamp => {
 		'/' + date.getFullYear() + ' ' +
 		('0' + date.getHours()).slice(-2) + ':' +
 		('0' + date.getMinutes()).slice(-2);
-}
+};
 
 
 const isQuestionExists = (arr, questionObj) => {
 	let result = arr.find(element => element.ts === questionObj.ts);
 	return result !== undefined && result.title === questionObj.title;
-}
+};
 
 
 const parseQuestionToObject = item => {
@@ -53,7 +53,7 @@ const parseQuestionToObject = item => {
 		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
 		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
 	}
-}
+};
 
 // Flow
 $(function() {
@@ -73,8 +73,8 @@ $(function() {
 					addToQueue(questionObj);
 					newQuestionsCount++;
 				}
-			})
-			queue.sort(sortByTimeStamp)
+			});
+			queue.sort(sortByTimeStamp);
 			// TODO: Test new isQuestionExist to see if accurate ts' are being used
 			resolve(newQuestionsCount);
 		})
@@ -89,7 +89,7 @@ $(function() {
 			success: page => {
 				getNewBatch(page)
 					.then(() => {
-						console.log(queue)
+						console.log(queue);
 						queue.forEach((el) => {
 							console.log(getDateTimeFromTimestamp(el.ts))
 						})
@@ -103,16 +103,16 @@ $(function() {
 				console.log(err)
 			}
 		})
-	}
+	};
 
 	const callAll = () => {
 		// Urgent: find a better name than "callAll" :<
-		getQuestionPage()
+		getQuestionPage();
 		setTimeout(() => {
 			callAll()
-		}, 120000)}
+		}, 120000)};
 
 
 	callAll()
 
-})
+});
