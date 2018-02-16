@@ -4,6 +4,7 @@
   "description": "none atm",
   "main": "main.js",
   "scripts": {
+    "start": "npx electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "evya",

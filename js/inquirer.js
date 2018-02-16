@@ -1,7 +1,8 @@
 'use strict';
 
 const path = require('path'),
-	notifier = require(path.join(__dirname, 'js/notifier.js')),
+	open = require('open'),
+	Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15',
 	tagString = 'questions/tagged/' + $('#tags').text().replace(/,/g, '+').toLowerCase(),
@@ -29,16 +30,6 @@ const addToQueue = element => {
 };
 
 
-const getDateTimeFromTimestamp = unixTimeStamp => {
-	let date = new Date(unixTimeStamp);
-	return ('0' + date.getDate()).slice(-2) +
-		'/' + ('0' + (date.getMonth() + 1)).slice(-2) +
-		'/' + date.getFullYear() + ' ' +
-		('0' + date.getHours()).slice(-2) + ':' +
-		('0' + date.getMinutes()).slice(-2);
-};
-
-
 const isQuestionExists = (arr, questionObj) => {
 	let result = arr.find(element => element.ts === questionObj.ts);
 	return result !== undefined && result.title === questionObj.title;
@@ -49,6 +40,7 @@ const parseQuestionToObject = item => {
 	let $item = $(item);
 	return {
 		title: $item.find('h3 > a').text(),
+		// Scrape body too
 		asker: $item.find('.user-details > a').text(),
 		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
 		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
@@ -57,6 +49,8 @@ const parseQuestionToObject = item => {
 
 // Flow
 $(function() {
+
+	let notifier = new Notifier(open)
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
@@ -89,11 +83,7 @@ $(function() {
 			success: page => {
 				getNewBatch(page)
 					.then(() => {
-						console.log(queue);
-						queue.forEach((el) => {
-							console.log(getDateTimeFromTimestamp(el.ts))
-						})
-						// notifier.notify(newQuesCount, queue)
+						notifier.genericNotify(5, queue)
 					})
 					.catch((err) => {
 						console.error(err)

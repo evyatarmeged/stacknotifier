@@ -1,25 +1,35 @@
 
 const open = require('open');
 
-module.exports = {
+module.exports = class Notifier {
 
-	genericNotify: function(n, quesArr) {
-		let notif = new Notification('Got ' + n + ' New Questions. Click to {{something}}')
-		// onclick logic
-	},
-	notify: function(question) {
-			let notif = new Notification(question.title, {
-				// Scrape body too ?
-				// body: question[0].title + '\r\n\r\n' + 'Asked by: ' + question[0].asker,
-				icon: 'sof.png'
-			});
-
-			notif.onclick = function(event) {
-				// Is there a default ?
-				event.preventDefault();
-				open(question.url);
-			}
-	},
-	notifyAll: function() {
+	getDateTimeFromTimestamp(unixTimeStamp) {
+		let date = new Date(unixTimeStamp);
+		return ('0' + date.getDate()).slice(-2) +
+			'/' + ('0' + (date.getMonth() + 1)).slice(-2) +
+			'/' + date.getFullYear() + ' ' +
+			('0' + date.getHours()).slice(-2) + ':' +
+			('0' + date.getMinutes()).slice(-2);
 	}
-};
+
+	genericNotify(n, quesArr) {
+		let notif = new Notification('Got ' + n + ' new questions. Click to create notifications.')
+		notif.onclick = event => {
+			for (let q of quesArr) {
+				// Replace with notification & for range of new questions only
+				console.log(q.title)
+			}
+		}
+	}
+
+	notify(question) {
+		new Notification(question.title, {
+			// Scrape body too ?
+			body: 'Asked by: ' + question.asker +
+			'\r\n\r\n' + this.getDateTimeFromTimestamp(question.ts),
+			icon: 'sof.png'
+		}).onclick = event => {
+			open(question.url)
+		};
+	}
+}
