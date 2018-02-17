@@ -24,7 +24,6 @@ module.exports = class Notifier {
 
 	notify(question) {
 		new Notification(question.title, {
-			// Scrape body too ?
 			body: 'Asked by: ' + question.asker +
 			'\r\n\r\n' + this.getDateTimeFromTimestamp(question.ts),
 			icon: 'sof.png'

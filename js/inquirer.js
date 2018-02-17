@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path'),
-	open = require('open'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15',
@@ -40,7 +39,7 @@ const parseQuestionToObject = item => {
 	let $item = $(item);
 	return {
 		title: $item.find('h3 > a').text(),
-		// Scrape body too
+		body: $item.find('.excerpt').text().trim(),
 		asker: $item.find('.user-details > a').text(),
 		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
 		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
@@ -50,7 +49,7 @@ const parseQuestionToObject = item => {
 // Flow
 $(function() {
 
-	let notifier = new Notifier(open)
+	let notifier = new Notifier()
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
@@ -64,6 +63,7 @@ $(function() {
 				if (queue.length !== 15) {
 					queue.push(questionObj)
 				} else if (isQuestionExists(queue, questionObj)) {
+					// Replace/fix addToQueue logic - it's incorrect
 					addToQueue(questionObj);
 					newQuestionsCount++;
 				}
@@ -83,7 +83,10 @@ $(function() {
 			success: page => {
 				getNewBatch(page)
 					.then(() => {
-						notifier.genericNotify(5, queue)
+						// notifier.genericNotify(5, queue)
+						queue.forEach((item) => {
+							console.log(item)
+						})
 					})
 					.catch((err) => {
 						console.error(err)
@@ -100,7 +103,7 @@ $(function() {
 		getQuestionPage();
 		setTimeout(() => {
 			callAll()
-		}, 120000)};
+		}, 60000)};
 
 
 	callAll()

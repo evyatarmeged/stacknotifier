@@ -16,7 +16,7 @@
 	    const args = require('electron').remote.process.argv,
             program = require('commander'),
             invalidQueryInterval = 'Invalid query interval parameter. Specify' +
-	        'a number between 0.5 and 60',
+	        ' a number between 0.5 and 60',
             invalidTags = 'Specify tags with only spaces between them';
 
         const invalidArguments = err => {
@@ -32,7 +32,6 @@
             .option('-i, --interval <n>', 'Interval to query Stackoverflow for new questions')
             .option('-t, --tags <tags>', 'Tags to filter questions by', tagList, '')
             .parse(args);
-
 
         const queryInterval = program.interval,
           tags = program.tags;
