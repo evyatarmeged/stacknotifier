@@ -33,7 +33,7 @@
             .option('-t, --tags <tags>', 'Tags to filter questions by', tagList, '')
             .parse(args);
 
-        const queryInterval = program.interval,
+        const queryInterval = parseInt(program.interval),
           tags = program.tags;
 
         if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
