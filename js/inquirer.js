@@ -20,7 +20,7 @@ const sortByTimeStamp = (a,b) => {
 }
 
 
-const isQuestionExists = (arr, questionObj) => {
+const questionExists = (arr, questionObj) => {
 	let result = arr.find(element => element.ts === questionObj.ts)
 	return result !== undefined && result.title === questionObj.title
 }
@@ -47,28 +47,32 @@ $(function() {
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
-			let $page = $(page),
-				questions = $page.find('.question-summary'),
-				newQuestionsCount = 0
+			try {
+				let $page = $(page),
+					questions = $page.find('.question-summary'),
+					newQuestionsCount = 0
 
-			$.each(questions, (_, item) => {
-				let questionObj = parseQuestionToObject(item)
-				// First run to collect base case data to compare against
-				if (queue.length !== 15) {
-					queue.push(questionObj)
-				} else if (!isQuestionExists(queue, questionObj)) {
+				$.each(questions, (_, item) => {
+					let questionObj = parseQuestionToObject(item)
+					// First run to collect base case data to compare against
+					if (queue.length !== 15) {
+						queue.push(questionObj)
+					} else if (!questionExists(queue, questionObj)) {
 
-					// Still lacking. Needs improvement.
+						// Still lacking. Needs improvement.
 
-					queue.unshift(questionObj);
-					queue.pop();
-					newQuestionsCount++
-				}
-			})
+						queue.unshift(questionObj);
+						queue.pop();
+						newQuestionsCount++
+					}
+				})
 
-			queue.sort(sortByTimeStamp)
-			// TODO: Test new isQuestionExist to see if accurate ts' are being used
-			resolve(newQuestionsCount)
+				queue.sort(sortByTimeStamp)
+				// TODO: Test new isQuestionExist to see if accurate ts' are being used
+				resolve(newQuestionsCount)
+			} catch (e) {
+				reject(e)
+			}
 		})
 	}
 
