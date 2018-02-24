@@ -10,7 +10,7 @@ module.exports = class Notifier {
 			'/' + date.getFullYear() + ' ' +
 			('0' + date.getHours()).slice(-2) + ':' +
 			('0' + date.getMinutes()).slice(-2);
-	}
+	};
 
 	genericNotify(n, quesArr) {
 		let notif = new Notification('Got ' + n + ' new questions. Click to create notifications.')
@@ -20,9 +20,10 @@ module.exports = class Notifier {
 				console.log(q.title)
 			}
 		}
-	}
+	};
 
 	notify(question) {
+		// Add question body ?
 		new Notification(question.title, {
 			body: 'Asked by: ' + question.asker +
 			'\r\n\r\n' + this.getDateTimeFromTimestamp(question.ts),
@@ -31,4 +32,8 @@ module.exports = class Notifier {
 			open(question.url)
 		};
 	}
+
+	errorNotify(msg) {
+		new Notification('Stackoverflow notifier has encountered an error', {body:msg})
+	};
 }

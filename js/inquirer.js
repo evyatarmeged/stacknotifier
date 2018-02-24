@@ -20,9 +20,9 @@ const sortByTimeStamp = (a,b) => {
 }
 
 
-const questionExists = (arr, questionObj) => {
-	let result = arr.find(element => element.ts === questionObj.ts)
-	return result !== undefined && result.title === questionObj.title
+const questionExists = (arr, question) => {
+	let result = arr.find(element => element.ts === question.ts)
+	return result !== undefined && result.title === question.title
 }
 
 
@@ -35,6 +35,11 @@ const parseQuestionToObject = item => {
 		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
 		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
 	}
+}
+
+
+const newerThanNewest = (newest, current) => {
+	return current.ts > newest.ts
 }
 
 
@@ -57,19 +62,18 @@ $(function() {
 					// First run to collect base case data to compare against
 					if (queue.length !== 15) {
 						queue.push(questionObj)
-					} else if (!questionExists(queue, questionObj)) {
 
-						// Still lacking. Needs improvement.
-
+						/* Test if the question exists in queue and if its timestamp is larger than the
+						newest question or it's just a question that propagated up due to deletion, etc. */
+					} else if (!questionExists(queue, questionObj) && newerThanNewest(queue[0], questionObj)) {
 						queue.unshift(questionObj);
 						queue.pop();
 						newQuestionsCount++
 					}
 				})
-
 				queue.sort(sortByTimeStamp)
-				// TODO: Test new isQuestionExist to see if accurate ts' are being used
 				resolve(newQuestionsCount)
+
 			} catch (e) {
 				reject(e)
 			}
