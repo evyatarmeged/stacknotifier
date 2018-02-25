@@ -100,7 +100,6 @@ $(function() {
 							console.log(notifier.getDateTimeFromTimestamp(item.ts, item.title))
 						})
 						// End to be removed
-
 						if (result > 0) {
 							result > 1 ? notifier.genericNotify(result, queue) : notifier.notify(last, last.body)
 						}
@@ -121,7 +120,7 @@ $(function() {
 		getQuestionPage()
 		setTimeout(() => {
 			execute()
-		}, 300000)}
+		}, 120000)}
 
 	execute()
 })

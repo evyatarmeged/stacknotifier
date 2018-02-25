@@ -2,6 +2,7 @@
 const open = require('open');
 
 module.exports = class Notifier {
+	// TODO: Maybe add an onclick event to expand question with body ?
 
 	getDateTimeFromTimestamp(unixTimeStamp) {
 		let date = new Date(unixTimeStamp);
@@ -21,9 +22,9 @@ module.exports = class Notifier {
 		}
 	};
 
-	notify(question, body=undefined) {
+	notify(question, body='') {
 		new Notification(question.title, {
-			body: body + '\r\n\r\n' + 'Asked by: ' + question.asker +
+			body: body + '\r\n' + 'Asked by: ' + question.asker +
 			'\r\n' + this.getDateTimeFromTimestamp(question.ts),
 			icon: $('img').attr('src')
 		}).onclick = event => {
