@@ -8,7 +8,6 @@ const path = require('path'),
 	qryInterval = $('#query-interval').text(),
 	completeUrl = baseUrl + tagString + suffix
 
-
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
 		return 1
@@ -19,12 +18,10 @@ const sortByTimeStamp = (a,b) => {
 	return 0
 }
 
-
 const questionExists = (arr, question) => {
 	let result = arr.find(element => element.ts === question.ts)
 	return result !== undefined && result.title === question.title
 }
-
 
 const parseQuestionToObject = item => {
 	let $item = $(item)
@@ -37,20 +34,16 @@ const parseQuestionToObject = item => {
 	}
 }
 
-
 const newerThanNewest = (newest, current) => {
 	return current.ts > newest.ts
 }
-
 
 // Flow
 $(function() {
 
 	$.fn.reverse = [].reverse;
-
 	let notifier = new Notifier(),
 		queue = []
-
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
@@ -64,9 +57,6 @@ $(function() {
 					// First run to collect base case data to compare against
 					if (queue.length !== 15) {
 						queue.push(questionObj)
-
-						/* Test if the question exists in queue and if its timestamp is larger than the
-						newest question or it's just a question that propagated up due to deletion, etc. */
 					} else if (!questionExists(queue, questionObj) && newerThanNewest(queue[0], questionObj)) {
 						queue.unshift(questionObj);
 						queue.pop();
@@ -81,7 +71,6 @@ $(function() {
 			}
 		})
 	}
-
 
 	const getQuestionPage = () => {
 		// Life is good without CORS

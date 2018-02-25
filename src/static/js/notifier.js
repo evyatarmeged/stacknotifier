@@ -1,4 +1,3 @@
-
 const open = require('open');
 
 module.exports = class Notifier {

@@ -21,7 +21,6 @@ function runGUI() {
 	})
 }
 
-
 // 4pr0z
 function runHeadless(args) {
 	mainWindow = new BrowserWindow({width: 800, height: 600});
@@ -35,7 +34,6 @@ function runHeadless(args) {
 		mainWindow = null
 	})
 }
-
 
 function createWindow() {
 	let args = process.argv;
