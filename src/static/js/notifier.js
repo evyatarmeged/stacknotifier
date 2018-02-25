@@ -15,19 +15,17 @@ module.exports = class Notifier {
 	genericNotify(n, quesArr) {
 		let notif = new Notification('Got ' + n + ' new questions. Click to create notifications.')
 		notif.onclick = event => {
-			for (let q of quesArr) {
-				// Replace with notification & for range of new questions only
-				console.log(q.title)
+			for (let i=0; i < n; i++) {
+				this.notify(quesArr[i])
 			}
 		}
 	};
 
-	notify(question) {
-		// Add question body ?
+	notify(question, body=undefined) {
 		new Notification(question.title, {
-			body: 'Asked by: ' + question.asker +
-			'\r\n\r\n' + this.getDateTimeFromTimestamp(question.ts),
-			icon: 'sof.png'
+			body: body + '\r\n\r\n' + 'Asked by: ' + question.asker +
+			'\r\n' + this.getDateTimeFromTimestamp(question.ts),
+			icon: $('img').attr('src')
 		}).onclick = event => {
 			open(question.url)
 		};

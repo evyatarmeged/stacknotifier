@@ -8,7 +8,17 @@ let mainWindow;
 
 // ommfg gui
 function runGUI() {
+	// Optimize size definitions
+	mainWindow = new BrowserWindow({width: 430, height: 520});
 
+	mainWindow.loadURL(url.format({
+		pathname: path.join(__dirname, '../static/gui.html'),
+		protocol: 'file:',
+	}));
+
+	mainWindow.on('closed', () => {
+		mainWindow = null
+	})
 }
 
 
@@ -17,9 +27,8 @@ function runHeadless(args) {
 	mainWindow = new BrowserWindow({width: 800, height: 600});
 
 	mainWindow.loadURL(url.format({
-		pathname: path.join(__dirname, 'headless.html'),
+		pathname: path.join(__dirname, '../static/headless.html'),
 		protocol: 'file:',
-		slashes: true
 	}));
 
 	mainWindow.on('closed', () => {

@@ -46,6 +46,8 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
+	$.fn.reverse = [].reverse;
+
 	let notifier = new Notifier(),
 		queue = []
 
@@ -57,7 +59,7 @@ $(function() {
 					questions = $page.find('.question-summary'),
 					newQuestionsCount = 0
 
-				$.each(questions, (_, item) => {
+				questions.reverse().each((_, item) => {
 					let questionObj = parseQuestionToObject(item)
 					// First run to collect base case data to compare against
 					if (queue.length !== 15) {
@@ -91,17 +93,26 @@ $(function() {
 				getNewBatch(page)
 					.then((result) => {
 						// ### Notify all new questions ###
+						let last = queue[0]
+						// To be removed
 						console.log(result)
 						queue.forEach((item) => {
-							console.log(notifier.getDateTimeFromTimestamp(item.ts))
+							console.log(notifier.getDateTimeFromTimestamp(item.ts, item.title))
 						})
+						// End to be removed
+
+						if (result > 0) {
+							result > 1 ? notifier.genericNotify(result, queue) : notifier.notify(last, last.body)
+						}
 					})
 					.catch((err) => {
 						console.error(err)
 					})
 			},
 			error: err => {
-				console.log(err)
+				let $err = $(err.responseText),
+					status = err.status;
+				notifier.errorNotify(status + '\r\n' + $err[1].text)
 			}
 		})
 	}
@@ -110,8 +121,9 @@ $(function() {
 		getQuestionPage()
 		setTimeout(() => {
 			execute()
-		}, 120000)}
+		}, 300000)}
 
 	execute()
-
 })
+
+// Add tags list and validation
