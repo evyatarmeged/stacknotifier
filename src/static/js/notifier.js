@@ -27,6 +27,8 @@ module.exports = class Notifier {
 			'\r\n' + this.getDateTimeFromTimestamp(question.ts),
 			icon: $('img').attr('src')
 		}).onclick = event => {
+			// Testing purposes
+			event.preventDefault();
 			open(question.url)
 		};
 	}
