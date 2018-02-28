@@ -22,15 +22,16 @@ module.exports = class Notifier {
 	};
 
 	notify(question, body='') {
+		let newline = body ? '\r\n\r\n' : '\r\n';
 		new Notification(question.title, {
-			body: body + '\r\n' + 'Asked by: ' + question.asker +
+			body: body + newline + 'Asked by: ' + question.asker +
 			'\r\n' + this.getDateTimeFromTimestamp(question.ts),
 			icon: $('img').attr('src')
 		}).onclick = event => {
 			// Testing purposes
 			event.preventDefault();
 			open(question.url)
-		};
+g		};
 	}
 
 	errorNotify(msg) {

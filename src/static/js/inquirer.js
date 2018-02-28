@@ -25,10 +25,9 @@ const questionExists = (arr, question) => {
 
 const parseQuestionToObject = item => {
 	let $item = $(item);
-			// body = $item.find('.excerpt').text().trim().split(' ').splice(0, 8).join(' ');
 	return {
 		title: $item.find('h3 > a').text(),
-		body: $item.find('.excerpt').text().trim().split(' ').splice(0, 10).join(' '),
+		body: $item.find('.excerpt').text().trim().split(' ').splice(0, 15).join(' ') + '...',
 		asker: $item.find('.user-details > a').text(),
 		url: baseUrl + $item.find('.question-hyperlink').attr('href'),
 		ts: Date.parse($item.find('.user-action-time > span').attr('title'))
@@ -85,7 +84,6 @@ $(function() {
 						// ### Notify all new questions ###
 						let last = queue[0]
 						// To be removed
-						notifier.notify(last, last.body)
 						console.log(result)
 						queue.forEach((item) => {
 							console.log(notifier.getDateTimeFromTimestamp(item.ts, item.title))
