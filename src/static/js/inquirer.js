@@ -84,7 +84,6 @@ $(function() {
 						// ### Notify all new questions ###
 						let last = queue[0]
 						// To be removed
-						notifier.notify(last, last.body)
 						console.log(result)
 						queue.forEach((item) => {
 							console.log(Notifier.getDateTimeFromTimestamp(item.ts, item.title))

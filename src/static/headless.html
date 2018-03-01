@@ -19,7 +19,7 @@
             hPath = require('path'),
             invalidQueryInterval = 'Invalid query interval parameter. Specify' +
 	        ' a number between 0.5 and 60',
-            invalidTags = 'Tags must be a comma separated, no spaces, and valid from Stackoverflow tag list';
+            invalidTags = 'Tags must be comma separated, no spaces, valid Stackoverflow tags';
 
         const invalidArguments = err => {
 	        process.stdout.write(err + '\r\n');
@@ -58,7 +58,6 @@
 
         fileReadPromise()
           .then((content) => {
-          	console.log(content)
 	          tags.forEach((item) => {
 		          if (item.includes(',') || !content.includes(item)) {
 			          invalidArguments(invalidTags)
