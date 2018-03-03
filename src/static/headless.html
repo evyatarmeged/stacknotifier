@@ -63,6 +63,7 @@
 			          invalidArguments(invalidTags)
 		          }
               })
+            $('#tags').text(tags.join(','))
           }).catch((err) => {
           	// Change to alert ?
           	console.error(err)

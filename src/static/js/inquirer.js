@@ -8,6 +8,7 @@ const path = require('path'),
 	qryInterval = $('#query-interval').text(),
 	completeUrl = baseUrl + tagString + suffix
 
+
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
 		return 1
