@@ -42,6 +42,7 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
+	console.log($('#tags').text().replace(/,/g, '+'))
 	$.fn.reverse = [].reverse;
 	let notifier = new Notifier(),
 		queue = []
@@ -114,5 +115,3 @@ $(function() {
 
 	execute()
 })
-
-// Add tags list and validation
