@@ -15,11 +15,10 @@ const invalidArguments = err => {
 
 const intervalValidation = interval => {
 	return new Promise((resolve, reject) => {
-		if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
+		if (isNaN(interval) || interval < 0.5 || interval > 60) {
 			reject(invalidQueryInterval)
-		} else {
-			resolve()
 		}
+		resolve()
 	})
 }
 
@@ -29,7 +28,7 @@ const tagValidation = tags => {
 		fs.readFile(path.join(__dirname, '../tags.txt'), (err, content) => {
 			if (err) throw (err);
 			let fileContent = content.toString().split('\r\n');
-			tags.split(',').forEach((tag) => {
+			tags.split(',').forEach(tag => {
 				if (!fileContent.includes(tag)) {
 					reject(invalidTags)
 				}
@@ -39,16 +38,20 @@ const tagValidation = tags => {
 	})
 }
 
+
 function validateArgs(interval, tags) {
+	// The 2 promises should be chained and use a joint catch
 	intervalValidation(interval)
 		.then(() => {
-	tagValidation(tags)
-		.then(() => {
-			return true;
+			tagValidation(tags)
+				.catch(e => {
+					invalidArguments(e)
+				})
 		})
-	}).catch((err) => {
-		invalidArguments(err)
-	})
+		.catch(e => {
+			invalidArguments(e)
+		})
+	return true;
 }
 
 

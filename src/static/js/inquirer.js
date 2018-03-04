@@ -53,7 +53,8 @@ $(function() {
 
 	$.fn.reverse = [].reverse;
 	let notifier = new Notifier(),
-		queue = []
+		queue = [],
+		completeUrl = baseUrl + urlTagString + suffix
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
