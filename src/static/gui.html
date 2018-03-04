@@ -4,17 +4,29 @@
     <meta charset="UTF-8">
     <title>Stack-Notifier</title>
 </head>
+
 <body>
+<script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
     <div class="form">
         <div class="thumbnail"><img src="images/sof.png"/></div>
         <form class="details-form">
             <label for="interval" style="align-content: left">Query interval in seconds</label>
             <input id="interval" type="number" min="0.5" max="60" placeholder="Min: 0.5 Max: 60" required="required"/>
             <label for="tags">Comma separated Stackoverflow tags</label>
-            <input id="tags" type="text" placeholder="java,spring,apache" required="required"/>
+            <input id="tags" type="text" placeholder="JavaScript,Electron" required="required"/>
             <button>Run Stack-Notifier</button>
         </form>
+        <a href="https://stackoverflow.com/tags">Is my tag Stackoverflow valid ?</a>
     </div>
+<script>
+    $('button').on('click', () => {
+    	let _script = document.createElement('script');
+	    _script.type = "text/javascript";
+	    _script.src = "Public/Scripts/filename.js.";
+	    document.getElementsByTagName("head")[0].appendChild(_script);
+	    return false;
+    })
+</script>
 </body>
 <style>
     /* Form */
@@ -23,7 +35,7 @@
         z-index: 1;
         background: #FFFFFF;
         max-width: 300px;
-        margin: 0 auto 100px;
+        margin: 15px auto 100px;
         padding: 30px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
@@ -67,7 +79,8 @@
         background: #efb92f;
         width: 100%;
         border: 0;
-        padding: 15px;
+        padding: 10px;
+        margin-bottom: 20px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
         border-bottom-left-radius: 3px;
@@ -140,6 +153,10 @@
         background: rgba(255, 255, 255, 0.8);
         width: 100%;
         height: 100%;
+    }
+
+    a {
+        margin: 30px;
     }
 
 </style>

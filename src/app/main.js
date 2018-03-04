@@ -10,7 +10,7 @@ let mainWindow;
 // ommfg gui
 function runGUI() {
 	// Optimize size definitions
-	mainWindow = new BrowserWindow({width: 430, height: 520});
+	mainWindow = new BrowserWindow({width: 430, height: 505});
 
 	mainWindow.loadURL(url.format({
 		pathname: path.join(__dirname, '../static/gui.html'),

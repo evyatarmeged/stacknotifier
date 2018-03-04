@@ -2,11 +2,14 @@
 
 const path = require('path'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
+	argval = require(path.join(__dirname, 'js/argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
-	suffix = '?sort=newest&pageSize=15',
-	tagString = 'questions/tagged/' + $('#tags').text().replace(/,/g, '+').toLowerCase(),
-	qryInterval = $('#query-interval').text(),
-	completeUrl = baseUrl + tagString + suffix
+	suffix = '?sort=newest&pageSize=15';
+
+
+let qryInterval = $('#query-interval').text();
+let _tags = $('#tags').text().toLowerCase();
+let urlTagString = 'questions/tagged/';
 
 
 const sortByTimeStamp = (a,b) => {
@@ -42,7 +45,12 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
-	console.log($('#tags').text().replace(/,/g, '+'))
+	if (argval.validateArgs(qryInterval, _tags)) {
+		qryInterval *= 60000;
+		_tags = _tags.replace(/,/g, '+');
+		urlTagString += _tags
+	}
+
 	$.fn.reverse = [].reverse;
 	let notifier = new Notifier(),
 		queue = []
@@ -76,7 +84,6 @@ $(function() {
 
 	const getQuestionPage = () => {
 		// Life is good without CORS
-
 		$.ajax({
 			type: 'GET',
 			url: completeUrl,
@@ -88,7 +95,7 @@ $(function() {
 						// To be removed
 						console.log(result)
 						queue.forEach((item) => {
-							console.log(Notifier.getDateTimeFromTimestamp(item.ts, item.title))
+							console.log(Notifier.getDateTimeFromTimestamp(item.ts))
 						})
 						// End to be removed
 						if (result > 0) {
@@ -111,7 +118,7 @@ $(function() {
 		getQuestionPage()
 		setTimeout(() => {
 			execute()
-		}, 60000)}
+		}, 120000)}
 
 	execute()
 })

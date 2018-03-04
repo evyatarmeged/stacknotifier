@@ -1,7 +1,6 @@
 const open = require('open');
 
 module.exports = class Notifier {
-	// TODO: Maybe add an onclick event to expand question with body ?
 
 	static getDateTimeFromTimestamp(unixTimeStamp) {
 		let date = new Date(unixTimeStamp);

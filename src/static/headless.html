@@ -14,61 +14,23 @@
     <script>
 
 	    const args = require('electron').remote.process.argv,
-            program = require('commander'),
-            fs = require('fs'),
-            hPath = require('path'),
-            invalidQueryInterval = 'Invalid query interval parameter. Specify' +
-	        ' a number between 0.5 and 60',
-            invalidTags = 'Tags must be comma separated, no spaces, valid Stackoverflow tags';
+            program = require('commander');
 
-        const invalidArguments = err => {
-	        process.stdout.write(err + '\r\n');
-	        window.close();
-	        process.exit(1)
-        };
-
-        // Make sure functionality is as expected
-        const fileReadPromise = () => {
-	        return new Promise((resolve, reject) => {
-                fs.readFile(hPath.join(__dirname, 'tags.txt'), (err, content) => {
-                    if (err) reject(err);
-                	resolve(content.toString().split('\r\n'))
-                })
-	        })
-        }
-
-        const tagList = val => val.split(',');
+        // const tagList = val => val.split(',');
 
         program
             .version('0.1.0')
             .option('-i, --interval <n>',
               'Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5')
             .option('-t, --tags <tags>',
-              'Tags to filter questions by. Must match tags from the SOF tag list.', tagList)
+              'Tags to filter questions by. Must match tags from the SOF tag list.')
             .parse(args);
 
         const queryInterval = program.interval,
           tags = program.tags;
 
-        if (isNaN(queryInterval) || queryInterval < 0.5 || queryInterval > 60) {
-        	invalidArguments(invalidQueryInterval)
-        } else {
-           $('#query-interval').text(queryInterval * 60000);
-        }
-
-        fileReadPromise()
-          .then((content) => {
-	          tags.forEach((item) => {
-		          if (item.includes(',') || !content.includes(item)) {
-			          invalidArguments(invalidTags)
-		          }
-              })
-            $('#tags').text(tags.join(','))
-          }).catch((err) => {
-          	// Change to alert ?
-          	console.error(err)
-        })
-
+        $('#query-interval').text(queryInterval)
+        $('#tags').text(tags)
 
     </script>
     <img src="images/sof.png" hidden>
