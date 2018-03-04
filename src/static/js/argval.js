@@ -40,18 +40,13 @@ const tagValidation = tags => {
 
 
 function validateArgs(interval, tags) {
-	// The 2 promises should be chained and use a joint catch
-	intervalValidation(interval)
+	Promise.all([intervalValidation(interval), tagValidation(tags)])
 		.then(() => {
-			tagValidation(tags)
-				.catch(e => {
-					invalidArguments(e)
-				})
+			return true;
 		})
 		.catch(e => {
 			invalidArguments(e)
 		})
-	return true;
 }
 
 

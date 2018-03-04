@@ -45,16 +45,17 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
-	if (argval.validateArgs(qryInterval, _tags)) {
-		qryInterval *= 60000;
-		_tags = _tags.replace(/,/g, '+');
-		urlTagString += _tags
-	}
+	argval.validateArgs(qryInterval, _tags)
 
 	$.fn.reverse = [].reverse;
 	let notifier = new Notifier(),
 		queue = [],
 		completeUrl = baseUrl + urlTagString + suffix
+
+	qryInterval *= 60000;
+	_tags = _tags.replace(/,/g, '+');
+	urlTagString += _tags
+
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
@@ -65,7 +66,6 @@ $(function() {
 
 				questions.reverse().each((_, item) => {
 					let questionObj = parseQuestionToObject(item)
-					// First run to collect base case data to compare against
 					if (queue.length !== 15) {
 						queue.push(questionObj)
 					} else if (!questionExists(queue, questionObj) && newerThanNewest(queue[0], questionObj)) {
