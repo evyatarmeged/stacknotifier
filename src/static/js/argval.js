@@ -25,6 +25,8 @@ const intervalValidation = interval => {
 
 const tagValidation = tags => {
 	return new Promise((resolve, reject) => {
+		if (!tags) resolve();
+
 		fs.readFile(path.join(__dirname, '../tags.txt'), (err, content) => {
 			if (err) throw (err);
 			let fileContent = content.toString().split('\r\n');

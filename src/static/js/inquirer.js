@@ -48,13 +48,14 @@ $(function() {
 	argval.validateArgs(qryInterval, _tags)
 
 	$.fn.reverse = [].reverse;
-	let notifier = new Notifier(),
-		queue = [],
-		completeUrl = baseUrl + urlTagString + suffix
 
 	qryInterval *= 60000;
 	_tags = _tags.replace(/,/g, '+');
 	urlTagString += _tags
+
+	let notifier = new Notifier(),
+		queue = [],
+		completeUrl = baseUrl + urlTagString + suffix
 
 
 	function getNewBatch(page) {
