@@ -57,11 +57,11 @@ const newerThanNewest = (newest, current) => {
 	return current.ts > newest.ts
 }
 
+
 // Flow
 $(function() {
 
-	argval.validateArgs(qryInterval, _tags)
-
+	argval.validateArgs(qryInterval, _tags);
 	$.fn.reverse = [].reverse;
 
 	qryInterval *= 60000;

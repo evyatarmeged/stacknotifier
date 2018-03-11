@@ -12,6 +12,8 @@
   "dependencies": {
     "commander": "^2.14.1",
     "electron": "^1.8.2",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "request": "^2.83.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
