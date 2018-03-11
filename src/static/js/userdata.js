@@ -1,3 +1,5 @@
+// TODO: Read https://api.stackexchange.com/docs/authentication
+
 class User {
 	constructor (email, password) {
 		this.email = email;
