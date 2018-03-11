@@ -1,6 +1,9 @@
 const open = require('open');
 
 module.exports = class Notifier {
+	constructor(url) {
+		this.url = url;
+	}
 
 	static getDateTimeFromTimestamp(unixTimeStamp) {
 		let date = new Date(unixTimeStamp);
@@ -11,12 +14,11 @@ module.exports = class Notifier {
 			('0' + date.getMinutes()).slice(-2);
 	};
 
-	genericNotify(n, quesArr) {
-		let notif = new Notification('Got ' + n + ' new questions. Click to create notifications.')
+	genericNotify(n) {
+		let notif = new Notification('Got ' + n + ' new questions.')
 		notif.onclick = event => {
-			for (let i=0; i < n; i++) {
-				this.notify(quesArr[i])
-			}
+			event.preventDefault();
+			open(this.url)
 		}
 	};
 
@@ -30,7 +32,7 @@ module.exports = class Notifier {
 			// Testing purposes
 			event.preventDefault();
 			open(question.url)
-g		};
+		};
 	}
 
 	errorNotify(msg) {

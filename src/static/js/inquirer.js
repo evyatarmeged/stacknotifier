@@ -68,9 +68,9 @@ $(function() {
 	_tags = _tags.replace(/,/g, '+');
 	urlTagString += _tags
 
-	let notifier = new Notifier(),
-		queue = [],
-		completeUrl = baseUrl + urlTagString + suffix
+	let completeUrl = baseUrl + urlTagString + suffix,
+		notifier = new Notifier(completeUrl),
+		queue = [];
 
 
 	function getNewBatch(page) {
@@ -116,7 +116,7 @@ $(function() {
 						})
 						// End to be removed
 						if (result > 0) {
-							result > 1 ? notifier.genericNotify(result, queue) : notifier.notify(last, last.body)
+							result > 1 ? notifier.genericNotify(result) : notifier.notify(last, last.body)
 						}
 					})
 					.catch((err) => {
