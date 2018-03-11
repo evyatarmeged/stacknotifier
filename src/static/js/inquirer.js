@@ -107,8 +107,6 @@ $(function() {
 			success: page => {
 				getNewBatch(page)
 					.then((result) => {
-						// ### Notify all new questions ###
-						let last = queue[0]
 						// To be removed
 						console.log(result)
 						queue.forEach((item) => {
@@ -116,7 +114,7 @@ $(function() {
 						})
 						// End to be removed
 						if (result > 0) {
-							result > 1 ? notifier.genericNotify(result) : notifier.notify(last, last.body)
+							result > 1 ? notifier.genericNotify(result) : notifier.notify(queue[0])
 						}
 					})
 					.catch((err) => {

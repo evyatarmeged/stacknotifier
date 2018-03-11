@@ -22,10 +22,9 @@ module.exports = class Notifier {
 		}
 	};
 
-	notify(question, body='') {
-		let newline = body ? '\r\n\r\n' : '\r\n';
+	notify(question) {
 		new Notification(question.title, {
-			body: body + newline + 'Asked by: ' + question.asker +
+			body: question.body + '\r\n\r\n' + 'Asked by: ' + question.asker +
 			'\r\n' + Notifier.getDateTimeFromTimestamp(question.ts),
 			icon: $('img').attr('src')
 		}).onclick = event => {
