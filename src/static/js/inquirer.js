@@ -7,9 +7,24 @@ const path = require('path'),
 	suffix = '?sort=newest&pageSize=15';
 
 
-let qryInterval = $('#query-interval').text();
-let _tags = $('#tags').text().toLowerCase();
+let isCommandLine = !!$('title').text().includes('cli');
 let urlTagString = 'questions/tagged/';
+
+function assignVarArgs() {
+	let interval, tags;
+
+	if (isCommandLine) {
+		interval = $('#query-interval').text();
+			tags = $('#tags').text().toLowerCase()
+	} else {
+		interval = $('#query-interval').val();
+			tags = $('#tags').val().toLowerCase()
+	}
+	return [interval, tags]
+}
+
+
+let [qryInterval, _tags] = assignVarArgs()
 
 
 const sortByTimeStamp = (a,b) => {

@@ -1,6 +1,3 @@
-// A try at implementing data scraping of personal user inbox & achievement updates
-
-
 class User {
 	constructor (email, password) {
 		this.email = email;

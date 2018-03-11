@@ -10,10 +10,11 @@
     <div class="form">
         <div class="thumbnail"><img src="images/sof.png"/></div>
         <form class="details-form">
-            <label for="interval" style="align-content: left">Query interval in seconds</label>
-            <input id="interval" type="number" min="0.5" max="60" placeholder="Min: 0.5 Max: 60" required="required"/>
+            <label for="query-interval" style="align-content: left">Query interval in seconds</label>
+            <input id="query-interval" type="number" min="0.5" max="60" placeholder="Min: 0.5 Max: 60"
+                   name="query-interval" required="required"/>
             <label for="tags">Comma separated Stackoverflow tags</label>
-            <input id="tags" type="text" placeholder="JavaScript,Electron" required="required"/>
+            <input id="tags" type="text" placeholder="Java,Spring,Tomcat" required="required"/>
             <button>Run Stack-Notifier</button>
         </form>
         <a href="https://stackoverflow.com/tags">Is my tag Stackoverflow valid ?</a>
@@ -22,7 +23,7 @@
     $('button').on('click', () => {
     	let _script = document.createElement('script');
 	    _script.type = "text/javascript";
-	    _script.src = "Public/Scripts/filename.js.";
+	    _script.src = "js/inquirer.js";
 	    document.getElementsByTagName("head")[0].appendChild(_script);
 	    return false;
     })
@@ -34,8 +35,8 @@
         position: relative;
         z-index: 1;
         background: #FFFFFF;
-        height: 505px;
-        width: 430px;
+        height: 315px;
+        width: 335px;
         /*max-width: 300px;*/
         margin: 15px auto 100px;
         padding: 30px;
