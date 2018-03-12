@@ -1,7 +1,6 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const request = require('request');
 
-let user, password;
 
 // Gecko driver built in ? hmmmmmm
 (async function obtainAccessToken() {
