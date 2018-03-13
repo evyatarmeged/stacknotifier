@@ -33,12 +33,12 @@ const request = require('request');
 	} finally {
 		// Is this the Stack exchange API anonymous/public key ? => U4DMV*8nvpm3EOpvf69Rxw((
 		driver.executeScript("return $('#param-access_token').attr('value');").then(token => {
-			request({url:'https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&filter=default&access_token='+token,
-				headers: {'accept-encoding': 'gzip'}, gzip: true}, (err, res, body) => {
-					console.log(res.statusCode);
-					console.log(body);
-			})
-
+			// request({url:'https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&filter=default&access_token='+token,
+			// 	headers: {'accept-encoding': 'gzip'}, gzip: true}, (err, res, body) => {
+			// 		console.log(res.statusCode);
+			// 		console.log(body);
+			// })
+			console.log('yeah')
 		}).catch(e => {
 			console.log(e)
 		})

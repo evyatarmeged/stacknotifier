@@ -1,5 +1,5 @@
 // TODO: Read https://api.stackexchange.com/docs/authentication
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
 const Firefox = require('selenium-webdriver/firefox')
 
 
@@ -7,34 +7,27 @@ class User {
 	constructor (email, password) {
 		this.email = email;
 		this.password = password;
-		this.driver = null;
+		this.driver = this.getDriver();
 		this.token = null;
-
 	}
 
-	waitForElement(el) {
-		return new Promise((resolve, reject) => {
-			this.driver.wait(until.elementIsVisible(el), 5000).then(() => {
-				resolve(el)
-			}).catch(e => {
-				reject(e)
-			})
-		})
-
+	// Chrome/Gecko driver should be a cli arg / read from cfg (yaml)
+	getDriver() {
+		return new Builder()
+		.forBrowser('firefox')
+		.build()
 	}
 
-	async initDriverAndGetToken() {
+	async getToken() {
 		let authWindow, parentWindow;
 		let accessTokenCss = '.load-access-token',
 			googleCss = '.major-provider.google-login',
 			userInputCss = '#identifierId',
 			passwordInputCss = '.whsOnd.zHQkBf';
 
-		this.driver = await new Builder()
-			.forBrowser('firefox')
-			.build()
-		parentWindow = await this.driver.getWindowHandle();
+
 		this.driver.get('https://api.stackexchange.com/docs/inbox-unread')
+		parentWindow = await this.driver.getWindowHandle();
 		this.driver.findElement(By.css(accessTokenCss)).click()
 		let windows = await this.driver.getAllWindowHandles();
 		await windows.forEach(window => {
@@ -42,8 +35,14 @@ class User {
 				authWindow = window
 			}
 		})
-		await this.driver.switchTo().window(authWindow)
+		await this.driver.switchTo().window(authWindow).catch(e => console.error(e))
+		await this.driver.wait(() => {
+			return this.driver.findElement(By.css(googleCss)).then(el =>  {
+				return el;
+			})
+		}, 5000, 'Failed to wait for 5 secs')
 
+		await this.driver.quit()
 	}
 
 	queryInbox(){}
@@ -53,4 +52,4 @@ class User {
 }
 
 let user = new User();
-user.initDriverAndGetToken()
+user.getToken()
