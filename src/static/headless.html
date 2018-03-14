@@ -16,15 +16,15 @@
 	    const args = require('electron').remote.process.argv,
             program = require('commander');
 
-        // const tagList = val => val.split(',');
-
-        program
+        // TODO: Add new options: username, password, geckodriver/chromedriver path, config path, use-cfg (flag)
+	    program
             .version('0.1.0')
             .option('-i, --interval <n>',
               'Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5')
             // Optional
             .option('-t, --tags [tags]',
               'Tags to filter questions by. Must match tags from the SOF tag list.')
+
             .parse(args);
 
         const queryInterval = program.interval,

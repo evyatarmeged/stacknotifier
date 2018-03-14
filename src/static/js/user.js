@@ -7,6 +7,7 @@ class User {
 	constructor (email, password) {
 		this.email = email;
 		this.password = password;
+		// Add option to specify chrome/gecko driver
 		this.driver = this.getDriver();
 		this.wait = 1500;
 		this.token = null;
