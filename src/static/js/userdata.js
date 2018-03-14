@@ -8,6 +8,7 @@ class User {
 		this.email = email;
 		this.password = password;
 		this.driver = this.getDriver();
+		this.wait = 5000;
 		this.token = null;
 	}
 
@@ -35,14 +36,22 @@ class User {
 				authWindow = window
 			}
 		})
-		await this.driver.switchTo().window(authWindow).catch(e => console.error(e))
-		await this.driver.wait(() => {
-			return this.driver.findElement(By.css(googleCss)).then(el =>  {
-				return el;
-			})
-		}, 5000, 'Failed to wait for 5 secs')
-
-		await this.driver.quit()
+		try {
+			await this.driver.switchTo().window(authWindow)
+			await this.driver.sleep(this.wait)
+			await this.driver.findElement(By.css(googleCss)).click();
+			await this.driver.sleep(this.wait)
+			await this.driver.findElement(By.css(userInputCss)).sendKeys(this.email, Key.ENTER);
+			await this.driver.sleep(this.wait)
+			await this.driver.findElement(By.css(passwordInputCss)).sendKeys(this.password, Key.ENTER);
+			await this.driver.switchTo().window(parentWindow)
+			await this.driver.sleep(this.wait)
+		} catch (exc) {
+			console.log(exc)
+		} finally {
+			// await this.driver.quit()
+			console.log('lolz')
+		}
 	}
 
 	queryInbox(){}
