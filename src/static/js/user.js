@@ -3,7 +3,7 @@ const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
 const Firefox = require('selenium-webdriver/firefox')
 
 
-class User {
+module.exports = class User {
 	constructor (email, password) {
 		this.email = email;
 		this.password = password;
@@ -70,11 +70,10 @@ class User {
 		}
 	}
 
-	queryInbox(){}
+	queryInbox(){
+		// TODO: Use this.token in Stackexchange API call to inbox
+	}
 
 	queryAchievements(){}
 
 }
-
-let user = new User();
-user.getToken()

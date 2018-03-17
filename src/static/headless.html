@@ -24,11 +24,14 @@
             // Optional
             .option('-t, --tags [tags]',
               'Tags to filter questions by. Must match tags from the SOF tag list.')
-
+            .option('-u, --username', 'Stackoverflow (Google) Username')
+            .option('-p, --password', 'Stackoverflow (Google) Password')
             .parse(args);
 
         const queryInterval = program.interval,
-          tags = program.tags;
+          tags = program.tags,
+            stackUser = program.username,
+            stackPassword = program.password;
 
         $('#query-interval').text(queryInterval)
         $('#tags').text(tags)

@@ -2,6 +2,7 @@
 
 const path = require('path'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
+	User = require(path.join(__dirname, './user.js')),
 	argval = require(path.join(__dirname, 'js/argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15';
@@ -69,9 +70,10 @@ $(function() {
 	urlTagString += _tags
 
 	let completeUrl = baseUrl + urlTagString + suffix,
-		notifier = new Notifier(completeUrl),
 		queue = [];
 
+	const notifier = new Notifier(completeUrl),
+			user = new User;
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
