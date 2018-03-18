@@ -2,7 +2,7 @@
 
 const path = require('path'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
-	User = require(path.join(__dirname, './user.js')),
+	User = require(path.join(__dirname, '/js/user.js')),
 	argval = require(path.join(__dirname, 'js/argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15';
@@ -12,20 +12,25 @@ let isCommandLine = !!$('title').text().includes('cli');
 let urlTagString = 'questions/tagged/';
 
 function assignVarArgs() {
-	let interval, tags;
+	let interval, tags, username, password;
 
 	if (isCommandLine) {
 		interval = $('#query-interval').text();
-			tags = $('#tags').text().toLowerCase()
+		tags = $('#tags').text().toLowerCase();
+		username = $('#username').text();
+		password = $('#password').text();
+
 	} else {
 		interval = $('#query-interval').val();
-			tags = $('#tags').val().toLowerCase()
+		tags = $('#tags').val().toLowerCase();
+		username = $('#username').val();
+		password = $('#password').val();
 	}
 	return [interval, tags]
 }
 
 
-let [qryInterval, _tags] = assignVarArgs()
+let [interval, tags, username, password] = assignVarArgs()
 
 
 const sortByTimeStamp = (a,b) => {
@@ -62,18 +67,19 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
-	argval.validateArgs(qryInterval, _tags);
+	argval.validateArgs(interval, tags);
 	$.fn.reverse = [].reverse;
 
-	qryInterval *= 60000;
-	_tags = _tags.replace(/,/g, '+');
-	urlTagString += _tags
+	interval *= 60000;
+	tags = tags.replace(/,/g, '+');
+	urlTagString += tags
 
 	let completeUrl = baseUrl + urlTagString + suffix,
 		queue = [];
 
 	const notifier = new Notifier(completeUrl),
-			user = new User;
+			user = new User(username, password, notifier);
+
 
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
@@ -131,16 +137,22 @@ $(function() {
 		})
 	}
 
-	const MakeAPIcall = () => {
-		user.queryAchievements();
+	const makeAPIcall = () => {
+		// user.queryAchievements();
 		user.queryInbox();
 	}
 
 	const execute = () => {
-		getQuestionPage()
+		getQuestionPage();
+		makeAPIcall();
+
 		setTimeout(() => {
-			execute()
+			execute();
 		}, 120000)}
 
-	execute()
+	user.getToken()
+	.then(() => {
+		execute()
+	})
+
 })

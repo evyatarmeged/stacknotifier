@@ -4,13 +4,14 @@ const Firefox = require('selenium-webdriver/firefox')
 
 
 module.exports = class User {
-	constructor (email, password) {
+	constructor (email, password, notifier) {
 		this.email = email;
 		this.password = password;
 		// Add option to specify chrome/gecko driver
 		this.driver = this.getDriver();
 		this.wait = 1500;
 		this.token = null;
+		this.notifier = notifier;
 	}
 
 	// Chrome/Gecko driver should be a cli arg / read from cfg (yaml)
@@ -71,7 +72,21 @@ module.exports = class User {
 	}
 
 	queryInbox(){
-		// TODO: Use this.token in Stackexchange API call to inbox
+		$.ajax({
+			type: 'GET',
+			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&
+			filter=default&access_token=${this.token}`,
+			success: result => {
+				alert(result)
+			},
+			error: err => {
+				console.error(err)
+			}
+
+		})
+	}
+
+	parseInboxResults() {
 	}
 
 	queryAchievements(){}
