@@ -26,7 +26,7 @@ function assignVarArgs() {
 		username = $('#username').val();
 		password = $('#password').val();
 	}
-	return [interval, tags]
+	return [interval, tags, username, password]
 }
 
 
