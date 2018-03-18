@@ -131,6 +131,11 @@ $(function() {
 		})
 	}
 
+	const MakeAPIcall = () => {
+		user.queryAchievements();
+		user.queryInbox();
+	}
+
 	const execute = () => {
 		getQuestionPage()
 		setTimeout(() => {
