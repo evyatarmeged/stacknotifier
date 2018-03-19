@@ -18,6 +18,7 @@
 
 	    const args = require('electron').remote.process.argv,
             program = require('commander'),
+            fs = require('fs'),
             YAML = require('yamljs');
 
         // TODO: Add new options: username, password, geckodriver/chromedriver path, config path, use-cfg (flag)
@@ -30,16 +31,14 @@
               'Tags to filter questions by. Must match tags from the SOF tag list.')
             .option('-u, --username [username]', 'Stackoverflow (Google) Username or Email')
             .option('-p, --password [password]', 'Stackoverflow (Google) Password')
-            .option('-d, --driver [driver]', 'Gecko or Chrome driver path')
-            .option('-c, --config', 'Config file path to read default arguments from')
+            .option('-d, --driver [driver]', 'Full webdriver path (Gecko or Chrome)')
+            .option('-c, --config', 'Use last configuration that was saved in a config file')
             .parse(args);
 
 	    let stackUser, stackPassword, stackDriver;
 
-	    // A config YAML file can be passed to re-use user, pass, dpath
-
 	    if (program.config)  {
-            YAML.load(program.config)
+            YAML.load('config.yaml')
               .then(nativeObj => {
                   stackUser = nativeObj.username;
                   stackPassword = nativeObj.password;
@@ -64,6 +63,11 @@
         $('#username').text(stackUser)
         $('#password').text(stackPassword)
         $('#driver').text(stackDriver)
+
+        // Write the arguments to config
+        fs.writeFileSync('config.yaml',
+          YAML.stringify({username: stackUser, password: stackPassword, driver: stackDriver}))
+
 
 
     </script>

@@ -1,5 +1,4 @@
-const fs = require('fs'),
-	path = require('path'),
+const path = require('path'),
 	invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
 	invalidTags = `Tags must be comma separated, no spaces, valid Stackoverflow tags. 
 		Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
@@ -83,8 +82,6 @@ function validateOptional(user, pass, dpath) {
 }
 
 
-let validator = {
+module.exports = {
 	validateRequired, validateOptional
 }
-
-module.exports = {validator}

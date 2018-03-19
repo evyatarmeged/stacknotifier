@@ -68,6 +68,8 @@ const newerThanNewest = (newest, current) => {
 $(function() {
 
 	validator.validateRequired(interval, tags);
+	validator.validateOptional(username, password, driver)
+
 	$.fn.reverse = [].reverse;
 
 	interval *= 60000;
