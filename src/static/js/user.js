@@ -1,7 +1,6 @@
 // TODO: Read https://api.stackexchange.com/docs/authentication
-const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
+const {Builder, By, Key, until} = require('selenium-webdriver');
 const Firefox = require('selenium-webdriver/firefox')
-
 
 module.exports = class User {
 	constructor (email, password, notifier) {
@@ -18,7 +17,7 @@ module.exports = class User {
 	getDriver() {
 		return new Builder()
 		.forBrowser('firefox')
-		.setFirefoxOptions(new Firefox.Options().headless())
+		// .setFirefoxOptions(new Firefox.Options().headless())
 		.build()
 	}
 

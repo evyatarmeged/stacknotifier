@@ -1,5 +1,3 @@
-'use strict'
-
 const path = require('path'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	User = require(path.join(__dirname, '/js/user.js')),
@@ -31,7 +29,10 @@ function assignVarArgs() {
 
 
 let [interval, tags, username, password] = assignVarArgs()
-
+console.log(interval)
+console.log(tags)
+console.log(username)
+console.log(password)
 
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
@@ -152,6 +153,7 @@ $(function() {
 
 	user.getToken()
 	.then(() => {
+		console.log(user.token)
 		execute()
 	})
 

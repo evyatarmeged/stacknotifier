@@ -15,7 +15,7 @@ module.exports = class Notifier {
 	};
 
 	genericNotify(n) {
-		let notif = new Notification('Got ' + n + ' new questions.')
+		let notif = new Notification(`Got ${n} new questions.`)
 		notif.onclick = event => {
 			event.preventDefault();
 			open(this.url)
@@ -24,8 +24,8 @@ module.exports = class Notifier {
 
 	notify(question) {
 		new Notification(question.title, {
-			body: question.body + '\r\n\r\n' + 'Asked by: ' + question.asker +
-			'\r\n' + Notifier.getDateTimeFromTimestamp(question.ts),
+			body: `${question.body}'\r\n\r\n'Asked by: ${question.asker}
+			'\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
 			icon: $('img').attr('src')
 		}).onclick = event => {
 			// Testing purposes
