@@ -1,13 +1,22 @@
 const fs = require('fs'),
 	path = require('path'),
-	invalidQueryInterval = 'Invalid query interval parameter. Specify' +
-		' a number between 0.5 and 60',
-		invalidTags = 'Tags must be comma separated, no spaces, valid Stackoverflow tags.\n' +
-			'Not sure about your tag ? look it up here: https://stackoverflow.com/tags';
+	invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
+	invalidTags = `Tags must be comma separated, no spaces, valid Stackoverflow tags. 
+		Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
+	invalidCredentials = `Username or Password are missing or invalid`,
+	invalidWebdriver = `Webdriver path was not provided or driver is invalid.`;
 
+
+const webdriverValidation = driver => {
+
+}
+
+const credentialsValidation = (username, password) => {
+
+}
 
 const invalidArguments = err => {
-	process.stdout.write(err + '\r\n');
+	process.stdout.write(`${err}\r\n`);
 	window.close();
 	process.exit(1)
 };
@@ -41,7 +50,7 @@ const tagValidation = tags => {
 }
 
 
-function validateArgs(interval, tags) {
+function validateRequired(interval, tags) {
 	Promise.all([intervalValidation(interval), tagValidation(tags)])
 		.then(() => {
 			return true;
@@ -51,5 +60,19 @@ function validateArgs(interval, tags) {
 		})
 }
 
+function validateOptional(user, pass, dpath) {
+	Promise.all([credentialsValidation(user, pass), webdriverValidation(dpath)])
+		.then(() => {
+			return true;
+		})
+		.catch(e => {
+			invalidArguments(e)
+		})
+}
 
-module.exports = {validateArgs}
+
+let validator = {
+	validateRequired, validateOptional
+}
+
+module.exports = {validator}

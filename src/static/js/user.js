@@ -54,19 +54,18 @@ module.exports = class User {
 			this.waitForElementAndExecute(googleCss)
 			this.waitForElementAndExecute(userInputCss, this.email)
 			this.waitForElementAndExecute(passwordInputCss, this.password)
-
-		} catch (exc) {
-			// Throw notification that token was not obtained
-			console.error('ERR', exc)
-
-		} finally {
+			// Finished authentication, grab token
 			await this.driver.switchTo().window(parentWindow)
 			this.driver.sleep(this.wait * 3)
 			this.driver.executeScript(tokenizeString).then(token => {
 				this.token = token;
-				console.log(this.token)
-				this.driver.quit();
 			})
+
+		} catch (exc) {
+			// Throw notification that token was not obtained
+			console.error('ERR', exc)
+		} finally {
+				await this.driver.quit();
 		}
 	}
 
@@ -76,18 +75,21 @@ module.exports = class User {
 			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&
 			filter=default&access_token=${this.token}`,
 			success: result => {
-				alert(result)
+				this.parseInboxResults(result)
 			},
 			error: err => {
 				console.error(err)
 			}
-
 		})
 	}
 
-	parseInboxResults() {
+	parseInboxResults(results) {
+		// If new msgs exists, throw notif
+		console.log(JSON.stringify(results));
 	}
 
-	queryAchievements(){}
+	queryAchievements() {
+		// Available in API ?
+	}
 
 }

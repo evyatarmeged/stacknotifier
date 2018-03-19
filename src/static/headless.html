@@ -11,10 +11,14 @@
 
     <div id="query-interval" hidden></div>
     <div id="tags" hidden></div>
+    <div id="username" hidden></div>
+    <div id="password" hidden></div>
+    <div id="driver" hidden></div>
     <script>
 
 	    const args = require('electron').remote.process.argv,
-            program = require('commander');
+            program = require('commander'),
+            YAML = require('yamljs');
 
         // TODO: Add new options: username, password, geckodriver/chromedriver path, config path, use-cfg (flag)
 	    program
@@ -24,17 +28,43 @@
             // Optional
             .option('-t, --tags [tags]',
               'Tags to filter questions by. Must match tags from the SOF tag list.')
-            .option('-u, --username', 'Stackoverflow (Google) Username')
-            .option('-p, --password', 'Stackoverflow (Google) Password')
+            .option('-u, --username [username]', 'Stackoverflow (Google) Username or Email')
+            .option('-p, --password [password]', 'Stackoverflow (Google) Password')
+            .option('-d, --driver [driver]', 'Gecko or Chrome driver path')
+            .option('-c, --config', 'Config file path to read default arguments from')
             .parse(args);
 
-        const stackInterval = program.interval,
-          stackTags = program.tags,
-            stackUser = program.username,
+	    let stackUser, stackPassword, stackDriver;
+
+	    // A config YAML file can be passed to re-use user, pass, dpath
+
+	    if (program.config)  {
+            YAML.load(program.config)
+              .then(nativeObj => {
+                  stackUser = nativeObj.username;
+                  stackPassword = nativeObj.password;
+                  stackDriver = nativeObj.driver;
+              })
+              .catch(err => {
+	              process.stdout.write(`${err}\r\n`);
+	              window.close();
+	              process.exit(1)
+              })
+        } else {
+            stackUser = program.username;
             stackPassword = program.password;
+            stackDriver = program.driver;
+        }
+
+        const stackInterval = program.interval,
+            stackTags = program.tags;
 
         $('#query-interval').text(stackInterval)
         $('#tags').text(stackTags)
+        $('#username').text(stackUser)
+        $('#password').text(stackPassword)
+        $('#driver').text(stackDriver)
+
 
     </script>
     <img src="images/sof.png" hidden>

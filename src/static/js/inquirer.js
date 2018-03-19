@@ -1,7 +1,7 @@
 const path = require('path'),
 	Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	User = require(path.join(__dirname, '/js/user.js')),
-	argval = require(path.join(__dirname, 'js/argval.js')),
+	validator = require(path.join(__dirname, 'js/argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15';
 
@@ -68,7 +68,7 @@ const newerThanNewest = (newest, current) => {
 // Flow
 $(function() {
 
-	argval.validateArgs(interval, tags);
+	validator.validateRequired(interval, tags);
 	$.fn.reverse = [].reverse;
 
 	interval *= 60000;
@@ -149,12 +149,13 @@ $(function() {
 
 		setTimeout(() => {
 			execute();
-		}, 120000)}
+		}, interval)}
 
 	user.getToken()
 	.then(() => {
-		console.log(user.token)
+		if (!user.token) {
+			notifier.errorNotify(`Unable to grab token for ${user.email}. Will not query inbox.`)
+		}
 		execute()
 	})
-
 })
