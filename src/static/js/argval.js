@@ -8,11 +8,23 @@ const fs = require('fs'),
 
 
 const webdriverValidation = driver => {
+	driver = driver.toLowerCase();
+	return new Promise((resolve, reject) => {
+		if (!driver || (!driver.includes('chromedriver') && !driver.includes('geckodriver'))) {
+			reject(invalidWebdriver)
+		}
+		resolve()
+	})
 
 }
 
 const credentialsValidation = (username, password) => {
-
+	return new Promise((resolve, reject) => {
+		if (!username || !password) {
+			reject(invalidCredentials)
+		}
+		resolve()
+	})
 }
 
 const invalidArguments = err => {

@@ -3,7 +3,7 @@ const {Builder, By, Key, until} = require('selenium-webdriver');
 const Firefox = require('selenium-webdriver/firefox')
 
 module.exports = class User {
-	constructor (email, password, notifier) {
+	constructor (email, password, notifier, driverPath) {
 		this.email = email;
 		this.password = password;
 		// Add option to specify chrome/gecko driver
@@ -13,7 +13,11 @@ module.exports = class User {
 		this.notifier = notifier;
 	}
 
-	// Chrome/Gecko driver should be a cli arg / read from cfg (yaml)
+	classifyDriver() {
+		// Classify as Chrome or Gecko
+	}
+
+	// Set up appropriate driver
 	getDriver() {
 		return new Builder()
 		.forBrowser('firefox')
@@ -91,5 +95,4 @@ module.exports = class User {
 	queryAchievements() {
 		// Available in API ?
 	}
-
 }

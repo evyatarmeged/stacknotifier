@@ -10,29 +10,28 @@ let isCommandLine = !!$('title').text().includes('cli');
 let urlTagString = 'questions/tagged/';
 
 function assignVarArgs() {
-	let interval, tags, username, password;
+	let interval, tags, username, password, driver;
 
 	if (isCommandLine) {
 		interval = $('#query-interval').text();
 		tags = $('#tags').text().toLowerCase();
 		username = $('#username').text();
 		password = $('#password').text();
+		driver = $('#driver').text();
 
 	} else {
 		interval = $('#query-interval').val();
 		tags = $('#tags').val().toLowerCase();
 		username = $('#username').val();
 		password = $('#password').val();
+		driver = $('#driver').val();
 	}
-	return [interval, tags, username, password]
+	return [interval, tags, username, password, driver]
 }
 
 
-let [interval, tags, username, password] = assignVarArgs()
-console.log(interval)
-console.log(tags)
-console.log(username)
-console.log(password)
+let [interval, tags, username, password, driver] = assignVarArgs()
+
 
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
