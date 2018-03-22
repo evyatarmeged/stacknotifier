@@ -12,6 +12,7 @@
   "dependencies": {
     "commander": "^2.14.1",
     "electron": "^1.8.2",
+    "geckodriver": "^1.11.0",
     "open": "0.0.5",
     "request": "^2.83.0",
     "selenium-webdriver": "^3.6.0",

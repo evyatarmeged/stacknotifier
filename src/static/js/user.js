@@ -1,32 +1,28 @@
 // TODO: Read https://api.stackexchange.com/docs/authentication
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
 const Firefox = require('selenium-webdriver/firefox')
-const Chrome = require('selenium-webdriver/chrome')
+require('geckodriver')
 
 
-module.exports = class User {
-	constructor (email, password, notifier, driverPath) {
+class User {
+	constructor (email, password, notifier) {
 		this.email = email;
 		this.password = password;
 		// Add option to specify chrome/gecko driver
-		this.driver = this.getDriver(driverPath);
+		this.driver = this.getDriver();
 		this.wait = 1500;
 		this.token = null;
 		this.notifier = notifier;
 	}
 
-	classifyDriver() {
-		// Classify as Chrome or Gecko
+	getDriver() {
+		return new Builder()
+			.forBrowser('firefeox')
+			.withCapabilities(Capabilities.firefox())
+			.setFirefoxOptions(new Firefox.Options().headless())
+			.build()
 	}
 
-	// Set up appropriate driver
-	getDriver(driverPath) {
-		console.log(driverPath)
-		return new Builder()
-		.forBrowser('firefox')
-		// .setFirefoxOptions(new Firefox.Options().headless())
-		.build()
-	}
 
 	waitForElementAndExecute(selector, input='') {
 		let webElement= By.css(selector);

@@ -31,18 +31,22 @@
               'Tags to filter questions by. Must match tags from the SOF tag list.')
             .option('-u, --username [username]', 'Stackoverflow (Google) Username or Email')
             .option('-p, --password [password]', 'Stackoverflow (Google) Password')
-            .option('-d, --driver [driver]', 'Full webdriver path (Gecko or Chrome)')
             .option('-c, --config', 'Use last configuration that was saved in a config file')
+            .on('--help', () => {
+	            window.close();
+	            process.exit(1)
+            })
             .parse(args);
 
-	    let stackUser, stackPassword, stackDriver;
+
+
+	    let stackUser, stackPassword;
 
 	    if (program.config)  {
             YAML.load('config.yaml')
               .then(nativeObj => {
                   stackUser = nativeObj.username;
                   stackPassword = nativeObj.password;
-                  stackDriver = nativeObj.driver;
               })
               .catch(err => {
 	              process.stdout.write(`${err}\r\n`);
@@ -52,7 +56,6 @@
         } else {
             stackUser = program.username;
             stackPassword = program.password;
-            stackDriver = program.driver;
         }
 
         const stackInterval = program.interval,
@@ -62,11 +65,10 @@
         $('#tags').text(stackTags)
         $('#username').text(stackUser)
         $('#password').text(stackPassword)
-        $('#driver').text(stackDriver)
 
         // Write the arguments to config
         fs.writeFileSync('config.yaml',
-          YAML.stringify({username: stackUser, password: stackPassword, driver: stackDriver}))
+          YAML.stringify({username: stackUser, password: stackPassword}))
 
 
 

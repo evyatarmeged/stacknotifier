@@ -17,20 +17,18 @@ function assignVarArgs() {
 		tags = $('#tags').text().toLowerCase();
 		username = $('#username').text();
 		password = $('#password').text();
-		driver = $('#driver').text();
 
 	} else {
 		interval = $('#query-interval').val();
 		tags = $('#tags').val().toLowerCase();
 		username = $('#username').val();
 		password = $('#password').val();
-		driver = $('#driver').val();
 	}
-	return [interval, tags, username, password, driver]
+	return [interval, tags, username, password]
 }
 
 
-let [interval, tags, username, password, driver] = assignVarArgs()
+let [interval, tags, username, password] = assignVarArgs()
 
 
 const sortByTimeStamp = (a,b) => {
