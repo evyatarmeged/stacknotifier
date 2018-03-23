@@ -21,7 +21,6 @@
             fs = require('fs'),
             YAML = require('yamljs');
 
-        // TODO: Add new options: username, password, geckodriver/chromedriver path, config path, use-cfg (flag)
 	    program
             .version('0.1.0')
             .option('-i, --interval <n>',
@@ -66,11 +65,9 @@
         $('#username').text(stackUser)
         $('#password').text(stackPassword)
 
-        // Write the arguments to config
+        // Write the arguments to .yaml
         fs.writeFileSync('config.yaml',
           YAML.stringify({username: stackUser, password: stackPassword}))
-
-
 
     </script>
     <img src="images/sof.png" hidden>

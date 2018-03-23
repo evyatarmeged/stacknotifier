@@ -8,9 +8,10 @@ const path = require('path'),
 
 let isCommandLine = !!$('title').text().includes('cli');
 let urlTagString = 'questions/tagged/';
+let user;
 
 function assignVarArgs() {
-	let interval, tags, username, password, driver;
+	let interval, tags, username, password;
 
 	if (isCommandLine) {
 		interval = $('#query-interval').text();
@@ -66,7 +67,7 @@ const newerThanNewest = (newest, current) => {
 $(function() {
 
 	validator.validateRequired(interval, tags);
-	validator.validateOptional(username, password, driver)
+	let isCredentials = validator.validateOptional(username, password)
 
 	$.fn.reverse = [].reverse;
 
@@ -77,8 +78,11 @@ $(function() {
 	let completeUrl = baseUrl + urlTagString + suffix,
 		queue = [];
 
-	const notifier = new Notifier(completeUrl),
-			user = new User(username, password, notifier);
+	const notifier = new Notifier(completeUrl);
+	if (isCredentials) {
+		user = new User(username, password, notifier);
+	}
+
 
 
 	function getNewBatch(page) {
@@ -144,17 +148,22 @@ $(function() {
 
 	const execute = () => {
 		getQuestionPage();
-		makeAPIcall();
+		if (user) makeAPIcall();
 
 		setTimeout(() => {
 			execute();
 		}, interval)}
 
-	user.getToken()
-	.then(() => {
-		if (!user.token) {
-			notifier.errorNotify(`Unable to grab token for ${user.email}. Will not query inbox.`)
-		}
+	if (user) {
+		user.getToken()
+			.then(() => {
+				if (!user.token) {
+					notifier.errorNotify(`Unable to grab token for ${user.email}. Will not query inbox.`)
+				}
+				execute()
+			})
+	} else {
 		execute()
-	})
+	}
+
 })

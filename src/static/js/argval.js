@@ -1,25 +1,15 @@
 const path = require('path'),
 	invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
 	invalidTags = `Tags must be comma separated, no spaces, valid Stackoverflow tags. 
-		Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
-	invalidCredentials = `Username or Password are missing or invalid`,
-	invalidWebdriver = `Webdriver path was not provided or driver is invalid.`;
+Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
+	invalidCredentials = `Username or Password are missing or invalid`;
 
-
-const webdriverValidation = driver => {
-	driver = driver.toLowerCase();
-	return new Promise((resolve, reject) => {
-		if (!driver || (!driver.includes('chromedriver') && !driver.includes('geckodriver'))) {
-			reject(invalidWebdriver)
-		}
-		resolve()
-	})
-
-}
 
 const credentialsValidation = (username, password) => {
 	return new Promise((resolve, reject) => {
-		if (!username || !password) {
+		if (!username && !password)  {
+			resolve()
+		} else if (!username || !password) {
 			reject(invalidCredentials)
 		}
 		resolve()
@@ -63,18 +53,16 @@ const tagValidation = tags => {
 
 function validateRequired(interval, tags) {
 	Promise.all([intervalValidation(interval), tagValidation(tags)])
-		.then(() => {
-			return true;
-		})
+		.then(() => {})
 		.catch(e => {
 			invalidArguments(e)
 		})
 }
 
-function validateOptional(user, pass, dpath) {
-	Promise.all([credentialsValidation(user, pass), webdriverValidation(dpath)])
-		.then(() => {
-			return true;
+function validateOptional(user, pass) {
+	Promise.all([credentialsValidation(user, pass)])
+		.then(isCredentials => {
+			return isCredentials;
 		})
 		.catch(e => {
 			invalidArguments(e)
