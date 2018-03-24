@@ -7,9 +7,7 @@ Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
 
 const credentialsValidation = (username, password) => {
 	return new Promise((resolve, reject) => {
-		if (!username && !password)  {
-			resolve()
-		} else if (!username || !password) {
+		if (!username || !password) {
 			reject(invalidCredentials)
 		}
 		resolve()
@@ -61,9 +59,7 @@ function validateRequired(interval, tags) {
 
 function validateOptional(user, pass) {
 	Promise.all([credentialsValidation(user, pass)])
-		.then(isCredentials => {
-			return isCredentials;
-		})
+		.then(() => {})
 		.catch(e => {
 			invalidArguments(e)
 		})

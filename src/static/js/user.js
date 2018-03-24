@@ -4,7 +4,7 @@ const Firefox = require('selenium-webdriver/firefox')
 require('geckodriver')
 
 
-class User {
+module.exports = class User {
 	constructor (email, password, notifier) {
 		this.email = email;
 		this.password = password;
@@ -88,7 +88,10 @@ class User {
 
 	parseInboxResults(results) {
 		// If new msgs exists, throw notif
-		console.log(JSON.stringify(results));
+		if (results.items.length !== 0) {
+			this.notifier.notifyQuestion()
+		}
+
 	}
 
 	queryAchievements() {

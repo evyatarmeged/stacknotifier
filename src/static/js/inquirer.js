@@ -63,11 +63,15 @@ const newerThanNewest = (newest, current) => {
 }
 
 
+
 // Flow
 $(function() {
 
 	validator.validateRequired(interval, tags);
-	let isCredentials = validator.validateOptional(username, password)
+
+	if (username && password) {
+		validator.validateOptional(username, password)
+	}
 
 	$.fn.reverse = [].reverse;
 
@@ -78,8 +82,8 @@ $(function() {
 	let completeUrl = baseUrl + urlTagString + suffix,
 		queue = [];
 
-	const notifier = new Notifier(completeUrl);
-	if (isCredentials) {
+	const notifier = new Notifier();
+	if (username && password) {
 		user = new User(username, password, notifier);
 	}
 
@@ -126,7 +130,7 @@ $(function() {
 						})
 						// End to be removed
 						if (result > 0) {
-							result > 1 ? notifier.genericNotify(result) : notifier.notify(queue[0])
+							result > 1 ? notifier.genericNotify(result, completeUrl) : notifier.notifyQuestion(queue[0])
 						}
 					})
 					.catch((err) => {
@@ -152,7 +156,10 @@ $(function() {
 
 		setTimeout(() => {
 			execute();
-		}, interval)}
+		}, interval)
+	}
+
+	// 'Main'
 
 	if (user) {
 		user.getToken()
@@ -165,5 +172,4 @@ $(function() {
 	} else {
 		execute()
 	}
-
 })

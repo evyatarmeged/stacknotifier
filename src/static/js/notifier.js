@@ -1,9 +1,6 @@
 const open = require('open');
 
 module.exports = class Notifier {
-	constructor(url) {
-		this.url = url;
-	}
 
 	static getDateTimeFromTimestamp(unixTimeStamp) {
 		let date = new Date(unixTimeStamp);
@@ -14,24 +11,33 @@ module.exports = class Notifier {
 			('0' + date.getMinutes()).slice(-2);
 	};
 
-	genericNotify(n) {
+	genericNotify(n, url) {
 		let notif = new Notification(`Got ${n} new questions.`)
 		notif.onclick = event => {
 			event.preventDefault();
-			open(this.url)
+			open(url)
 		}
 	};
 
-	notify(question) {
+	notifyQuestion(question) {
 		new Notification(question.title, {
 			body: `${question.body}'\r\n\r\n'Asked by: ${question.asker}
 			'\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
 			icon: $('img').attr('src')
 		}).onclick = event => {
-			// Testing purposes
 			event.preventDefault();
 			open(question.url)
 		};
+	}
+
+	notifyInbox(content) {
+		new Notification("Unread Inbox Message", {
+			body: `For question: ${content.title}\r\nType: ${content.item_type}`,
+			icon: $('img').attr('src')
+		}).onclick = event => {
+			event.preventDefault();
+			open(content.link)
+		}
 	}
 
 	errorNotify(msg) {
