@@ -90,12 +90,12 @@ module.exports = class User {
 	parseInboxResults(results) {
 		let messages = results.items;
 		// If new msgs exists, throw notif
-		// if (messages.length !== 0) {
-		// 	messages.forEach(msg => {
-				this.notifier.notifyInbox({title: 'testing'}, results.quota_remaining)
-			// })
+		if (messages.length !== 0) {
+			messages.forEach(msg => {
+				this.notifier.notifyInbox(msg, results.quota)
+			})
 		}
-
+	}
 
 	queryAchievements() {
 		// Available @ API ?

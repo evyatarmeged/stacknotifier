@@ -32,9 +32,7 @@ module.exports = class Notifier {
 
 	notifyInbox(content, quota) {
 		new Notification("Unread Inbox Message", {
-			body: `For question: ${content.title}
-			Type: ${content.item_type}
-			Remaining API Quota: ${quota}`,
+			body: `For question: ${content.title}\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
