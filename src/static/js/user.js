@@ -78,6 +78,7 @@ module.exports = class User {
 			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&
 			filter=default&access_token=${this.token}`,
 			success: result => {
+				console.log(result)
 				this.parseInboxResults(result)
 			},
 			error: err => {
@@ -87,13 +88,14 @@ module.exports = class User {
 	}
 
 	parseInboxResults(results) {
+		let messages = results.items;
 		// If new msgs exists, throw notif
-		if (results.items.length !== 0) {
-			results.forEach(msg => {
-				this.notifier.notifyInbox(msg)
-			})
+		// if (messages.length !== 0) {
+		// 	messages.forEach(msg => {
+				this.notifier.notifyInbox({title: 'testing'}, results.quota_remaining)
+			// })
 		}
-	}
+
 
 	queryAchievements() {
 		// Available @ API ?

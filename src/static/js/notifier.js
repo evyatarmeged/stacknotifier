@@ -23,17 +23,19 @@ module.exports = class Notifier {
 		new Notification(question.title, {
 			body: `${question.body}'\r\n\r\n'Asked by: ${question.asker}
 			'\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
-			icon: $('img').attr('src')
+			icon: $('#sof').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
 			open(question.url)
 		};
 	}
 
-	notifyInbox(content) {
+	notifyInbox(content, quota) {
 		new Notification("Unread Inbox Message", {
-			body: `For question: ${content.title}\r\nType: ${content.item_type}`,
-			icon: $('img').attr('src')
+			body: `For question: ${content.title}
+			Type: ${content.item_type}
+			Remaining API Quota: ${quota}`,
+			icon: $('#msg').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
 			open(content.link)
