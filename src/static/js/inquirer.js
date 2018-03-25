@@ -1,5 +1,4 @@
-const path = require('path'),
-	Notifier = require(path.join(__dirname, 'js/notifier.js')),
+const Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	User = require(path.join(__dirname, '/js/user.js')),
 	validator = require(path.join(__dirname, 'js/argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
@@ -152,7 +151,7 @@ $(function() {
 
 	const execute = () => {
 		getQuestionPage();
-		if (user) makeAPIcall();
+		if (user.token) makeAPIcall();
 
 		setTimeout(() => {
 			execute();

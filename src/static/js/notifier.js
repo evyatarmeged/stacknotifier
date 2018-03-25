@@ -1,5 +1,6 @@
 const open = require('open');
 
+
 module.exports = class Notifier {
 
 	static getDateTimeFromTimestamp(unixTimeStamp) {

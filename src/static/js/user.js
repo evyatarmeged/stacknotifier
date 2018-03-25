@@ -78,7 +78,6 @@ module.exports = class User {
 			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&
 			filter=default&access_token=${this.token}`,
 			success: result => {
-				console.log(result)
 				this.parseInboxResults(result)
 			},
 			error: err => {

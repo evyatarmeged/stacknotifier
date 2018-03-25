@@ -25,15 +25,17 @@
         <a href="https://stackoverflow.com/tags">Is my tag Stackoverflow valid ?</a>
     </div>
 <script>
+	const path = require('path'),
+		fs = require('fs')
+
     $('button').on('click', () => {
+    	this.window.close();
     	let _script = document.createElement('script');
 	    _script.type = "text/javascript";
 	    _script.src = "js/inquirer.js";
 	    document.getElementsByTagName("head")[0].appendChild(_script);
 	    return false;
     })
-    const path = require('path'),
-      fs = require('fs');
 </script>
 </body>
 <style>
