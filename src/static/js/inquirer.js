@@ -145,13 +145,13 @@ $(function() {
 	}
 
 	const makeAPIcall = () => {
-		// user.queryAchievements();
+		// user.queryReputationChanges();
 		user.queryInbox();
 	}
 
 	const execute = () => {
 		getQuestionPage();
-		if (user.token) makeAPIcall();
+		if (user && user.token) makeAPIcall();
 
 		setTimeout(() => {
 			execute();

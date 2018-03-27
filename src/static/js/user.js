@@ -91,12 +91,12 @@ module.exports = class User {
 		// If new msgs exists, throw notif
 		if (messages.length !== 0) {
 			messages.forEach(msg => {
-				this.notifier.notifyInbox(msg, results.quota)
+				this.notifier.notifyInbox(msg, results.quota_remaining)
 			})
 		}
 	}
 
-	queryAchievements() {
+	queryReputationChanges() {
 		// Available @ API ?
 	}
 }

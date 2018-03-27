@@ -22,8 +22,7 @@ module.exports = class Notifier {
 
 	notifyQuestion(question) {
 		new Notification(question.title, {
-			body: `${question.body}'\r\n\r\n'Asked by: ${question.asker}
-			'\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
+			body: `${question.body}\r\n\r\nAsked by: ${question.asker}\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
 			icon: $('#sof').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
@@ -33,7 +32,7 @@ module.exports = class Notifier {
 
 	notifyInbox(content, quota) {
 		new Notification("Unread Inbox Message", {
-			body: `For question: ${content.title}\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
+			body: `${content.title}\r\n\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
