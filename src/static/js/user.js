@@ -88,7 +88,7 @@ module.exports = class User {
 
 	parseInboxResults(results) {
 		let messages = results.items;
-		// If new msgs exists, throw notif
+		// If new msgs exist, throw notif
 		if (messages.length !== 0) {
 			messages.forEach(msg => {
 				this.notifier.notifyInbox(msg, results.quota_remaining)
@@ -97,6 +97,6 @@ module.exports = class User {
 	}
 
 	queryReputationChanges() {
-		// Available @ API ?
+		// TODO: Implement a call to /2.2/me/reputation?site=stackoverflow and parse results
 	}
 }

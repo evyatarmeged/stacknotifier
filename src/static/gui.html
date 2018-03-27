@@ -7,29 +7,22 @@
 
 <body>
 <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
-    <div class="form">
-        <div class="thumbnail"><img src="images/sof.png"/></div>
-        <form class="details-form">
-            <label for="query-interval" style="align-content: left">Query interval in seconds</label>
-            <input id="query-interval" type="number" min="0.5" max="60" placeholder="Min: 0.5 Max: 60"
-                   name="query-interval" required="required"/>
-            <label for="tags">Comma separated Stackoverflow tags</label>
-            <input id="tags" type="text" placeholder="Java,Spring,Tomcat" required="required"/>
-            <label for="username">Stackoverflow (Google) Username or Email</label>
-            <input id="username" type="text" placeholder="Optional" />
-            <label for="password">Stackoverflow (Google) Password</label>
-            <input id="password" type="text" placeholder="Optional" />
-            <!--Driver input must be a file browsing window -->
-            <button>Run Stack-Notifier</button>
-        </form>
-        <a href="https://stackoverflow.com/tags">Is my tag Stackoverflow valid ?</a>
+<form class="form" action="#">
+    <h2>StackNotifier</h2>
+    <input placeholder="Min: 0.5, Max: 60" min="0.5" max="60" type="number" required>
+    <input placeholder="Javascript,Node.js,Electron" required>
+    <input placeholder="Stackoverflow (Google) Username/Email">
+    <input placeholder="Stackoverflow (Google) Password">
+    <button>Run StackNotifier</button>
+    <div>
+        <span>Stackoverflow credentials are optional</span><br>
     </div>
+</form>
 <script>
 	const path = require('path'),
 		fs = require('fs')
 
     $('button').on('click', () => {
-    	this.window.close();
     	let _script = document.createElement('script');
 	    _script.type = "text/javascript";
 	    _script.src = "js/inquirer.js";
@@ -39,140 +32,86 @@
 </script>
 </body>
 <style>
-    /* Form */
-    .form {
-        position: relative;
-        z-index: 1;
-        background: #FFFFFF;
-        height: 315px;
-        width: 335px;
-        /*max-width: 300px;*/
-        margin: 15px auto 100px;
-        padding: 30px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        text-align: center;
+    body{
+        background: #a7afb4;
+        margin:0
     }
-    .form .thumbnail {
-        width: 175px;
-        height: 175px;
-        margin: 0 auto 30px;
-        padding: 10px 10px;
-        border-top-left-radius: 100%;
-        border-top-right-radius: 100%;
-        border-bottom-left-radius: 100%;
-        border-bottom-right-radius: 100%;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
+    .form{
+        width:360px;
+        height:440px;
+        background:#e6e6e6;
+        border-radius:8px;
+        box-shadow:0 0 40px -10px #000;
+        margin:calc(50vh - 220px) auto;
+        padding:20px 30px;
+        max-width:calc(100vw - 40px);
+        box-sizing:border-box;
+        font-family:'Montserrat',sans-serif;
+        position:relative
     }
-    .form .thumbnail img {
-        display: block;
-        width: 100%;
+    h2{
+        margin:10px 0;
+        padding-bottom:10px;
+        width:180px;
+        color:#78788c;
+        border-bottom:3px solid #78788c
     }
-    .form input {
-        outline: 0;
-        background: #f2f2f2;
-        width: 100%;
-        border: 0;
-        margin: 0 0 15px;
-        padding: 15px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
+    input{
+        width:100%;
+        padding:10px;
+        box-sizing:border-box;
+        background:none;
+        outline:none;
+        resize:none;
         font-size: 14px;
+        border:0;
+        font-family:'Montserrat',sans-serif;
+        transition:all .3s;
+        border-bottom:2px solid #bebed2;
+        margin: 10px;
     }
-    .form button {
-        outline: 0;
+    input:focus{
+        border-bottom:2px solid #78788c
+    }
+    p {
+        content:attr(type);
+        display:block;
+        margin:28px 0 0;
+        font-size:16px;
+        color:#5a5a5a;
+        font-weight: bold;
+    }
+    button{
+        float:right;
+        padding:8px 12px;
+        margin:8px 0 0;
+        font-family:'Montserrat',sans-serif;
+        border:1px solid #d39f2d;
+        background:0;
+        color: #575757;
+        cursor:pointer;
+        transition:all .3s
+    }
+    button:hover{
         background: #efb92f;
-        width: 100%;
-        border: 0;
-        padding: 10px;
-        margin-bottom: 20px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        color: #FFFFFF;
-        font-size: 14px;
-        -webkit-transition: all 0.3 ease;
-        transition: all 0.3 ease;
-        cursor: pointer;
+        color: #000000
     }
-    .form .message {
-        margin: 15px 0 0;
-        color: #b3b3b3;
-        font-size: 12px;
-    }
-    .form .message a {
-        color: #EF3B3A;
-        text-decoration: none;
-    }
-    .form .register-form {
-        display: none;
-    }
-
-    .container {
-        position: relative;
-        z-index: 1;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-    .container:before, .container:after {
-        content: "";
-        display: block;
-        clear: both;
-    }
-    .container .info {
-        margin: 50px auto;
-        text-align: center;
-    }
-    .container .info h1 {
-        margin: 0 0 15px;
-        padding: 0;
-        font-size: 36px;
-        font-weight: 300;
-        color: #1a1a1a;
-    }
-    .container .info span {
-        color: #4d4d4d;
-        font-size: 12px;
-    }
-    .container .info span a {
+    div{
+        content:'Hi';
+        position:absolute;
+        bottom:-15px;
+        right:-20px;
+        background: #efbb3c;
         color: #000000;
-        text-decoration: none;
+        width:320px;
+        padding:16px 4px 16px 0;
+        border-radius:6px;
+        font-size:13px;
+        box-shadow:10px 10px 40px -14px #000
     }
-    .container .info span .fa {
-        color: #EF3B3A;
-    }
-
-    body {
-        background: #ccc;
-        font-family: "Roboto", sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    body:before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        display: block;
-        background: rgba(255, 255, 255, 0.8);
-        width: 100%;
-        height: 100%;
-    }
-
-    a {
-        margin: 30px;
-    }
-
-    form {
-        position: relative;
+    span{
+        margin:0 5px 0 15px;
+        font-size: 15px;
     }
 
 </style>
