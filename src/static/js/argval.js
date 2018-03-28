@@ -1,5 +1,4 @@
-const path = require('path'),
-	invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
+const invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
 	invalidTags = `Tags must be comma separated, no spaces, valid Stackoverflow tags. 
 Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
 	invalidCredentials = `Username or Password are missing or invalid`;
