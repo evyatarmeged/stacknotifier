@@ -23,7 +23,7 @@ function runGUI() {
 }
 
 // 4pr0z
-function runHeadless(args) {
+function runHeadless() {
 	mainWindow = new BrowserWindow({width: 800, height: 600});
 
 	mainWindow.loadURL(url.format({
