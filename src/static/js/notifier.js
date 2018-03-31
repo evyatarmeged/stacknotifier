@@ -41,7 +41,7 @@ module.exports = class Notifier {
 	}
 
 	notifyMultipleMsgs(n, quota) {
-		new Notification(`Got {n} Unread Inbox Messages`, {
+		new Notification(`Got ${n} Unread Inbox Messages`, {
 			body: `Remaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {

@@ -89,15 +89,14 @@ module.exports = class User {
 		})
 	}
 
-	// All unread unread inbox who generated from the same question should be merged to a single HTML5 notif.
 	parseInboxResults(results) {
 		let totalMessages = results.items;
 		// Test for new msgs
 		if (totalMessages.length !== 0) {
 			if (totalMessages.length > 1) {
-				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota)
+				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota_remaining)
 			} else {
-				this.notifier.notifyInboxMsg(totalMessages[0], results.quota)
+				this.notifier.notifyInboxMsg(totalMessages[0], results.quota_remaining)
 			}
 		}
 	}
