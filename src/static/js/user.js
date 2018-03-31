@@ -8,11 +8,11 @@ module.exports = class User {
 	constructor (email, password, notifier) {
 		this.email = email;
 		this.password = password;
-		// Add option to specify chrome/gecko driver
 		this.driver = this.getDriver();
 		this.wait = 1500;
 		this.token = null;
 		this.notifier = notifier;
+		this.problemNotified = false;
 	}
 
 	getDriver() {
@@ -64,9 +64,9 @@ module.exports = class User {
 				this.token = token;
 			})
 
-		} catch (exc) {
+		} catch (e) {
 			// Throw notification that token was not obtained
-			console.error('ERR', exc)
+			this.notifier.errorNotify(e)
 		} finally {
 				await this.driver.quit();
 		}
@@ -75,23 +75,30 @@ module.exports = class User {
 	queryInbox(){
 		$.ajax({
 			type: 'GET',
-			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=5&
+			url: `https://api.stackexchange.com/2.2/inbox/unread?key=U4DMV*8nvpm3EOpvf69Rxw((&page=1&pagesize=10&
 			filter=default&access_token=${this.token}`,
 			success: result => {
 				this.parseInboxResults(result)
 			},
-			error: err => {
-				console.error(err)
+			error: e => {
+				if (!this.problemNotified) {
+					this.notifier.errorNotify(e);
+					this.problemNotified = true;
+				}
 			}
 		})
 	}
 
+	// All unread unread inbox who generated from the same question should be merged to a single HTML5 notif.
 	parseInboxResults(results) {
 		let messages = results.items;
 		// If new msgs exist, throw notif
 		if (messages.length !== 0) {
+
+
 			messages.forEach(msg => {
-				this.notifier.notifyInbox(msg, results.quota_remaining)
+				// this.notifier.notifyInbox(msg, results.quota_remaining)
+				console.log(msg)
 			})
 		}
 	}
