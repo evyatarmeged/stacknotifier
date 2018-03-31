@@ -129,7 +129,7 @@ $(function() {
 						})
 						// End to be removed
 						if (result > 0) {
-							result > 1 ? notifier.genericNotify(result, completeUrl) : notifier.notifyQuestion(queue[0])
+							result > 1 ? notifier.notifyMultipleQuestions(result, completeUrl) : notifier.notifyQuestion(queue[0])
 						}
 					})
 					.catch((err) => {

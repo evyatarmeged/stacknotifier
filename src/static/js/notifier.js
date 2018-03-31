@@ -12,8 +12,8 @@ module.exports = class Notifier {
 			('0' + date.getMinutes()).slice(-2);
 	};
 
-	genericNotify(n, url) {
-		let notif = new Notification(`Got ${n} new questions.`)
+	notifyMultipleQuestions(n, url) {
+		let notif = new Notification(`Got ${n} new questions.`, {icon: $('#sof').attr('src')})
 		notif.onclick = event => {
 			event.preventDefault();
 			open(url)
@@ -23,20 +23,29 @@ module.exports = class Notifier {
 	notifyQuestion(question) {
 		new Notification(question.title, {
 			body: `${question.body}\r\n\r\nAsked by: ${question.asker}\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
-			icon: $('#sof').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
 			open(question.url)
 		};
 	}
 
-	notifyInbox(content, quota) {
+	notifyInboxMsg(content, quota) {
 		new Notification("Unread Inbox Message", {
 			body: `${content.title}\r\n\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
+			// Goto msg URL
 			event.preventDefault();
 			open(content.link)
+		}
+	}
+
+	notifyMultipleMsgs(n, quota) {
+		new Notification(`Got {n} Unread Inbox Messages`, {
+			body: `Remaining API Quota: ${quota}`,
+			icon: $('#msg').attr('src')
+		}).onclick = event => {
+			// Open user inbox ?
 		}
 	}
 
