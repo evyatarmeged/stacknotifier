@@ -22,7 +22,8 @@ module.exports = class Notifier {
 
 	notifyQuestion(question) {
 		new Notification(question.title, {
-			body: `${question.body}\r\n\r\nAsked by: ${question.asker}\r\n'${Notifier.getDateTimeFromTimestamp(question.ts)}`,
+			body: `${question.body}\r\n\r\nAsked by: ${question.asker}\r\n${Notifier.getDateTimeFromTimestamp(question.ts)}`,
+			icon: $('#sof').attr('src'),
 		}).onclick = event => {
 			event.preventDefault();
 			open(question.url)
