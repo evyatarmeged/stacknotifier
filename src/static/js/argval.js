@@ -4,7 +4,7 @@ Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
 	invalidCredentials = `Username or Password are missing or invalid`;
 
 
-const credentialsValidation = (username, password) => {
+function credentialsValidation(username, password) {
 	return new Promise((resolve, reject) => {
 		if (!username || !password) {
 			reject(invalidCredentials)
@@ -13,14 +13,14 @@ const credentialsValidation = (username, password) => {
 	})
 }
 
-const invalidArguments = err => {
+function invalidArguments(err) {
 	process.stdout.write(`${err}\r\n`);
 	window.close();
 	process.exit(1)
-};
+}
 
 
-const intervalValidation = interval => {
+function intervalValidation(interval) {
 	return new Promise((resolve, reject) => {
 		if (isNaN(interval) || interval < 0.5 || interval > 60) {
 			reject(invalidQueryInterval)
@@ -30,7 +30,7 @@ const intervalValidation = interval => {
 }
 
 
-const tagValidation = tags => {
+function tagValidation(tags) {
 	return new Promise((resolve, reject) => {
 		if (!tags) resolve();
 

@@ -46,7 +46,7 @@ const questionExists = (arr, question) => {
 	return result !== undefined && result.title === question.title
 }
 
-const parseQuestionToObject = item => {
+function parseQuestionToObject(item) {
 	let $item = $(item);
 	return {
 		title: $item.find('h3 > a').text(),
@@ -114,7 +114,7 @@ $(function() {
 		})
 	}
 
-	const getQuestionPage = () => {
+	function getQuestionPage() {
 		// Life is good without CORS
 		$.ajax({
 			type: 'GET',
@@ -144,18 +144,16 @@ $(function() {
 		})
 	}
 
-	const makeAPIcall = () => {
+	const makeAPIcalls = () => {
 		// user.queryReputationChanges();
 		user.queryInbox();
 	}
 
-	const execute = () => {
+	function execute() {
 		getQuestionPage();
-		if (user && user.token) makeAPIcall();
+		if (user && user.token) makeAPIcalls();
 
-		setTimeout(() => {
-			execute();
-		}, interval)
+		setTimeout(() => {execute()}, interval)
 	}
 
 	// 'Main'
