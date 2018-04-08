@@ -7,20 +7,10 @@
 <body>
 <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
 <form class="form" action="#">
-    <h2>Stackoverflow Notifier</h2>
-    <div>
-        <label>Query Interval</label>
-        <input style="width: 25%" placeholder="Min: 0.5, Max: 60" min="0.5" max="60" type="number" required><br>
-    </div>
-    <div>
-        <label>Tags</label>
-        <input placeholder="Javascript,Node.js,Electron" required>
-    </div>
-    <div>
-    <label>Stackoverflow (Google) Username/Email</label>
+    <input style="width: 25%" placeholder="Min: 0.5, Max: 60" min="0.5" max="60" type="number" required><br>
+    <input placeholder="Javascript,Node.js,Electron" required>
     <input placeholder="Stackoverflow (Google) Username/Email">
-    </div>
-        <input placeholder="Stackoverflow (Google) Password">
+    <input placeholder="Stackoverflow (Google) Password">
     <br>
     <button>Run StackNotifier</button>
     <div class="footer">
