@@ -61,8 +61,6 @@ const newerThanNewest = (newest, current) => {
 	return current.ts > newest.ts
 }
 
-
-
 // Flow
 $(function() {
 
@@ -77,6 +75,14 @@ $(function() {
 	interval *= 60000;
 	tags = tags.replace(/,/g, '+');
 	urlTagString += tags
+
+	/* Deal with trailing comma breaking the script
+	 e.g tag: Java, would cause a urlTagString of questions/tagged/java+ <-- this would get no results
+  */
+	if (urlTagString.endsWith('+')) {
+		let pos = urlTagString.lastIndexOf('+')
+		urlTagString = `${urlTagString.substring(0, pos)}${urlTagString.substring(pos+1)}`
+	}
 
 	let completeUrl = baseUrl + urlTagString + suffix,
 		queue = [];

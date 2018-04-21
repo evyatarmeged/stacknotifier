@@ -1,35 +1,56 @@
-const {app, BrowserWindow} = require('electron');
+const {app, Menu, BrowserWindow, Tray} = require('electron')
 const path = require('path');
 const url = require('url');
 
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+/* Keep a global reference of the window object, if you don't, the window will
+be closed automatically when the JavaScript object is garbage collected. */
+let tray = null
 let mainWindow;
 
 // ommfg gui
 function runGUI() {
 	// Optimize size definitions
 	mainWindow = new BrowserWindow({width: 600, height: 480});
+	tray = new Tray(path.join(__dirname, '../static/images/sof.png'))
+
+	mainWindow.on('minimize', event => {
+		event.preventDefault();
+		mainWindow.hide();
+	});
 
 	mainWindow.loadURL(url.format({
 		pathname: path.join(__dirname, '../static/gui.html'),
 		protocol: 'file:',
 	}));
 
+	const contextMenu = Menu.buildFromTemplate([
+		{label: 'show', click: () => {
+				mainWindow.show();}},
+		{label: 'Item2', type: 'radio', checked: true}
+	])
+
+	tray.setToolTip('This is my application.')
+	tray.setContextMenu(contextMenu)
 	mainWindow.on('closed', () => {
 		mainWindow = null
 	})
-}
 
-// 4pr0z
+}
 function runHeadless() {
-	mainWindow = new BrowserWindow({width: 800, height: 600});
+	mainWindow = new BrowserWindow({show: false});
+	tray = new Tray(path.join(__dirname, '../static/images/sof.png'))
 
 	mainWindow.loadURL(url.format({
 		pathname: path.join(__dirname, '../static/headless.html'),
 		protocol: 'file:',
 	}));
+
+	const contextMenu = Menu.buildFromTemplate([
+		{label: 'Quit', click: () => {
+				mainWindow.close();}}
+	])
+
+	tray.setContextMenu(contextMenu)
 
 	mainWindow.on('closed', () => {
 		mainWindow = null
