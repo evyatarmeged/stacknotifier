@@ -20,18 +20,18 @@
             program = require('commander'),
             path = require('path'),
             fs = require('fs'),
-            YAML = require('yamljs');
+            yaml = require('js-yaml');
 
 	    program
-            .version('0.1.0')
+            .version('0.1.1')
             .option('-i, --interval <n>',
               'Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5')
-            // Optional
             .option('-t, --tags [tags]',
-              'Tags to filter questions by. Must match tags from the SOF tag list.')
+	            'Tags to filter questions by. Must match tags from the SOF tag list.')
+            // Optional
             .option('-u, --username [username]', 'Stackoverflow (Google) Username or Email')
             .option('-p, --password [password]', 'Stackoverflow (Google) Password')
-            .option('-c, --config', 'Use last configuration that was saved in a config file')
+            .option('-c, --config', 'Use username and password from when last specified. Saved in config.yaml')
             .on('--help', () => {
 	            window.close();
 	            process.exit(1)
@@ -39,20 +39,19 @@
             .parse(args);
 
 
+        let confPath = path.join(__dirname, '../../config.yaml');
+        let stackUser, stackPassword;
 
-	    let stackUser, stackPassword;
-
-	    if (program.config)  {
-            YAML.load('config.yaml')
-              .then(nativeObj => {
-                  stackUser = nativeObj.username;
-                  stackPassword = nativeObj.password;
-              })
-              .catch(err => {
-	              process.stdout.write(`${err}\r\n`);
-	              window.close();
-	              process.exit(1)
-              })
+        if (program.config)  {
+	        try {
+		        let config = yaml.safeLoad(fs.readFileSync(confPath));
+		        stackUser = config.username
+		        stackPassword = config.password
+	        } catch (err) {
+                process.stdout.write(`${err}\r\n`);
+                window.close();
+                process.exit(1)
+	        }
         } else {
             stackUser = program.username;
             stackPassword = program.password;
@@ -66,14 +65,15 @@
         $('#username').text(stackUser)
         $('#password').text(stackPassword)
 
-        // Write the arguments to .yaml
-        fs.writeFileSync('config.yaml',
-          YAML.stringify({username: stackUser, password: stackPassword}))
+        if (stackUser && stackPassword) {
+	        // Write the arguments to .yaml
+	        fs.writeFileSync(confPath,
+		        yaml.safeDump({username: stackUser, password: stackPassword}))
+        }
 
     </script>
     <img id="sof" src="images/sof.png" hidden>
     <img id="msg" src="images/msg.png" hidden>
     <script src="js/inquirer.js"></script>
-    <script>process.stdout.write(`Started running for tags: ${stackTags}\n`);</script>
 </body>
 </html>

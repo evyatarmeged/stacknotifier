@@ -5,25 +5,17 @@ const Notifier = require(path.join(__dirname, 'js/notifier.js')),
 	suffix = '?sort=newest&pageSize=15';
 
 
-let isCommandLine = !!$('title').text().includes('cli');
 let urlTagString = 'questions/tagged/';
 let user;
 
 function assignVarArgs() {
 	let interval, tags, username, password;
 
-	if (isCommandLine) {
-		interval = $('#query-interval').text();
-		tags = $('#tags').text().toLowerCase();
-		username = $('#username').text();
-		password = $('#password').text();
+	interval = $('#query-interval').text();
+	tags = $('#tags').text().toLowerCase();
+	username = $('#username').text();
+	password = $('#password').text();
 
-	} else {
-		interval = $('#query-interval').val();
-		tags = $('#tags').val().toLowerCase();
-		username = $('#username').val();
-		password = $('#password').val();
-	}
 	return [interval, tags, username, password]
 }
 
@@ -158,17 +150,19 @@ $(function() {
 	function execute() {
 		getQuestionPage();
 		if (user && user.token) makeAPIcalls();
-
 		setTimeout(() => {execute()}, interval)
 	}
 
 	// 'Main'
 
 	if (user) {
+		process.stdout.write(`Trying to get token for ${user.email}\n`);
 		user.getToken()
 			.then(() => {
 				if (!user.token) {
-					notifier.errorNotify(`Unable to grab token for ${user.email}. Will not query inbox.`)
+					process.stdout.write(`Unable to grab token for ${user.email}. Will not query inbox.\n`)
+				} else {
+					process.stdout.write(`API token for ${user.email} obtained successfully.`)
 				}
 				execute()
 			})

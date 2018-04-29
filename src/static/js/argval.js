@@ -32,7 +32,7 @@ function intervalValidation(interval) {
 
 function tagValidation(tags) {
 	return new Promise((resolve, reject) => {
-		if (!tags) resolve();
+		if (!tags) reject();
 
 		fs.readFile(path.join(__dirname, '../tags.txt'), (err, content) => {
 			if (err) throw (err);
@@ -64,7 +64,7 @@ function validateOptional(user, pass) {
 		})
 }
 
-
+``
 module.exports = {
 	validateRequired, validateOptional
 }
