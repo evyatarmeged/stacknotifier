@@ -13,6 +13,9 @@ module.exports = class User {
 		this.token = null;
 		this.notifier = notifier;
 		this.problemNotified = false;
+		this.accountID = null;
+		this.inboxURL = null;
+		this.reputationURL = null;
 	}
 
 	getDriver() {
@@ -23,6 +26,28 @@ module.exports = class User {
 			.build()
 	}
 
+	// Must use async/await or 1st inbox query won't open as accountID will be null still
+	async assignId(accountId) {
+		this.accountID = await accountId
+		this.inboxURL = await `https://stackexchange.com/users/${this.accountID}?tab=inbox`;
+		this.reputationURL = await `https://stackexchange.com/users/${this.accountID}?tab=reputation`;
+	}
+
+	getId() {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				type: 'GET',
+				url: `https://api.stackexchange.com/2.2/me?key=U4DMV*8nvpm3EOpvf69Rxw((&site=stackoverflow&order=desc&sort=\
+			reputation&access_token=${this.token}&filter=default`,
+				// Scope not bound
+				success: result => {
+					this.assignId(result.items[0]['account_id'])
+						.then(() => resolve())
+				},
+				error: e => reject(e)
+			})
+		})
+	}
 
 	waitForElementAndExecute(selector, input='') {
 		let webElement= By.css(selector);
@@ -94,7 +119,7 @@ module.exports = class User {
 		// Test for new msgs
 		if (totalMessages.length !== 0) {
 			if (totalMessages.length > 1) {
-				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota_remaining)
+				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota_remaining, this.inboxURL)
 			} else {
 				this.notifier.notifyInboxMsg(totalMessages[0], results.quota_remaining)
 			}

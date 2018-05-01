@@ -8,7 +8,7 @@ let tray = null
 let mainWindow;
 
 function runHeadless() {
-	mainWindow = new BrowserWindow({show: true});
+	mainWindow = new BrowserWindow({show: true, title: "Stack Notifier"});
 	tray = new Tray(path.join(__dirname, '../static/images/sof.png'))
 
 	mainWindow.loadURL(url.format({
@@ -32,7 +32,6 @@ function createWindow() {
 	let args = process.argv;
 	if (args.length <= 5 && (args[2] !== '--help' || args[2] !== '-h')) {
 		process.stdout.write(`Insufficent arguments. Run --help for more information\r\n`);
-		mainWindow = null;
 		process.exit(1)
 	} else {
 		runHeadless(args)

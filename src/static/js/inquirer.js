@@ -33,6 +33,10 @@ const sortByTimeStamp = (a,b) => {
 	return 0
 }
 
+const noToken = () => {
+	process.stdout.write(`Unable to grab token for ${user.email}. Will not query inbox.\n`)
+}
+
 const questionExists = (arr, question) => {
 	let result = arr.find(element => element.ts === question.ts)
 	return result !== undefined && result.title === question.title
@@ -120,12 +124,6 @@ $(function() {
 			success: page => {
 				getNewBatch(page)
 					.then((result) => {
-						// To be removed
-						console.log(result)
-						queue.forEach((item) => {
-							console.log(Notifier.getDateTimeFromTimestamp(item.ts))
-						})
-						// End to be removed
 						if (result > 0) {
 							result > 1 ? notifier.notifyMultipleQuestions(result, completeUrl) : notifier.notifyQuestion(queue[0])
 						}
@@ -149,23 +147,34 @@ $(function() {
 
 	function execute() {
 		getQuestionPage();
-		if (user && user.token) makeAPIcalls();
+		if (user && user.token) {
+			makeAPIcalls();
+		}
 		setTimeout(() => {execute()}, interval)
 	}
 
 	// 'Main'
-
 	if (user) {
-		process.stdout.write(`Trying to get token for ${user.email}\n`);
+		process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
 		user.getToken()
 			.then(() => {
 				if (!user.token) {
-					process.stdout.write(`Unable to grab token for ${user.email}. Will not query inbox.\n`)
+					noToken();
 				} else {
-					process.stdout.write(`API token for ${user.email} obtained successfully.`)
+					process.stdout.write(`API token for ${user.email} obtained successfully.\n`)
+					process.stdout.write(`Getting accountID for inbox/reputation queries...\n`)
+						.then(() => {
+					user.getId()
+							if (!user.accountID) {
+								process.stdout.write(`Could not get accountID. Inbox & reputation on-click events will not work.\n`)
+							} else {
+								process.stdout.write(`Done\n`)
+							}
+						})
 				}
 				execute()
 			})
+			.catch(e => noToken())
 	} else {
 		execute()
 	}
