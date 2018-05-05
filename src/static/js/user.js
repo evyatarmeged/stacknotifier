@@ -1,7 +1,7 @@
 // TODO: Read https://api.stackexchange.com/docs/authentication
 const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
-const Firefox = require('selenium-webdriver/firefox')
-require('geckodriver')
+const Firefox = require('selenium-webdriver/firefox');
+require('geckodriver');
 
 
 module.exports = class User {
@@ -14,8 +14,7 @@ module.exports = class User {
 		this.notifier = notifier;
 		this.problemNotified = false;
 		this.accountID = null;
-		this.inboxURL = null;
-		this.reputationURL = null;
+		this.exchangeUrl = null;
 	}
 
 	getDriver() {
@@ -28,9 +27,8 @@ module.exports = class User {
 
 	// Must use async/await or 1st inbox query won't open as accountID will be null still
 	async assignId(accountId) {
-		this.accountID = await accountId
-		this.inboxURL = await `https://stackexchange.com/users/${this.accountID}?tab=inbox`;
-		this.reputationURL = await `https://stackexchange.com/users/${this.accountID}?tab=reputation`;
+		this.accountID = await accountId;
+		this.exchangeUrl = await `https://stackexchange.com/users/${this.accountID}?tab=`;
 	}
 
 	getId() {
@@ -55,7 +53,7 @@ module.exports = class User {
 		let el = this.driver.findElement(webElement);
 		this.driver.wait(until.elementIsVisible(el), this.wait * 3).then(el => {
 			this.driver.sleep(this.wait);
-			!input ? el.click() : el.sendKeys(input, Key.ENTER)
+			!input ? el.click() : el.sendKeys(input, Key.ENTER);
 			this.driver.sleep(this.wait)
 		})
 	}
@@ -69,7 +67,7 @@ module.exports = class User {
 			tokenizeString = "return $('#param-access_token').attr('value');";
 
 		try {
-			this.driver.get('https://api.stackexchange.com/docs/inbox-unread')
+			this.driver.get('https://api.stackexchange.com/docs/inbox-unread');
 			parentWindow = await this.driver.getWindowHandle();
 			this.waitForElementAndExecute(accessTokenCss);
 			let windows = await this.driver.getAllWindowHandles();
@@ -77,21 +75,21 @@ module.exports = class User {
 				if (window !== parentWindow) {
 					authWindow = window
 				}
-			})
-			await this.driver.switchTo().window(authWindow)
-			this.waitForElementAndExecute(googleCss)
-			this.waitForElementAndExecute(userInputCss, this.email)
-			this.waitForElementAndExecute(passwordInputCss, this.password)
+			});
+			await this.driver.switchTo().window(authWindow);
+			this.waitForElementAndExecute(googleCss);
+			this.waitForElementAndExecute(userInputCss, this.email);
+			this.waitForElementAndExecute(passwordInputCss, this.password);
 			// Finished authentication, grab token
-			await this.driver.switchTo().window(parentWindow)
-			this.driver.sleep(this.wait * 3)
+			await this.driver.switchTo().window(parentWindow);
+			this.driver.sleep(this.wait * 3);
 			this.driver.executeScript(tokenizeString).then(token => {
 				this.token = token;
 			})
 
 		} catch (e) {
 			// Throw notification that token was not obtained
-			this.notifier.errorNotify(e)
+			this.notifier.errorNotify(`Error getting API token:\n${e}`)
 		} finally {
 				await this.driver.quit();
 		}
@@ -107,7 +105,7 @@ module.exports = class User {
 			},
 			error: e => {
 				if (!this.problemNotified) {
-					this.notifier.errorNotify(e);
+					this.notifier.errorNotify(`Error querying inbox:\n${e}`);
 					this.problemNotified = true;
 				}
 			}
@@ -119,7 +117,7 @@ module.exports = class User {
 		// Test for new msgs
 		if (totalMessages.length !== 0) {
 			if (totalMessages.length > 1) {
-				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota_remaining, this.inboxURL)
+				this.notifier.notifyMultipleMsgs(totalMessages.length, results.quota_remaining, `${this.exchangeUrl}inbox`)
 			} else {
 				this.notifier.notifyInboxMsg(totalMessages[0], results.quota_remaining)
 			}
@@ -129,4 +127,4 @@ module.exports = class User {
 	queryReputationChanges() {
 		// TODO: Implement a call to /2.2/me/reputation?site=stackoverflow and parse results
 	}
-}
+};

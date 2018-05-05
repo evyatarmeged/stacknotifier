@@ -20,7 +20,7 @@ function assignVarArgs() {
 }
 
 
-let [interval, tags, username, password] = assignVarArgs()
+let [interval, tags, username, password] = assignVarArgs();
 
 
 const sortByTimeStamp = (a,b) => {
@@ -31,16 +31,12 @@ const sortByTimeStamp = (a,b) => {
 		return -1
 	}
 	return 0
-}
-
-const noToken = () => {
-	process.stdout.write(`Unable to grab token for ${user.email}. Will not query inbox.\n`)
-}
+};
 
 const questionExists = (arr, question) => {
-	let result = arr.find(element => element.ts === question.ts)
+	let result = arr.find(element => element.ts === question.ts);
 	return result !== undefined && result.title === question.title
-}
+};
 
 function parseQuestionToObject(item) {
 	let $item = $(item);
@@ -55,7 +51,7 @@ function parseQuestionToObject(item) {
 
 const newerThanNewest = (newest, current) => {
 	return current.ts > newest.ts
-}
+};
 
 // Flow
 $(function() {
@@ -70,13 +66,13 @@ $(function() {
 
 	interval *= 60000;
 	tags = tags.replace(/,/g, '+');
-	urlTagString += tags
+	urlTagString += tags;
 
 	/* Deal with trailing comma breaking the script
 	 e.g tag: Java, would cause a urlTagString of questions/tagged/java+ <-- this would get no results
   */
 	if (urlTagString.endsWith('+')) {
-		let pos = urlTagString.lastIndexOf('+')
+		let pos = urlTagString.lastIndexOf('+');
 		urlTagString = `${urlTagString.substring(0, pos)}${urlTagString.substring(pos+1)}`
 	}
 
@@ -95,10 +91,10 @@ $(function() {
 			try {
 				let $page = $(page),
 					questions = $page.find('.question-summary'),
-					newQuestionsCount = 0
+					newQuestionsCount = 0;
 
 				questions.reverse().each((_, item) => {
-					let questionObj = parseQuestionToObject(item)
+					let questionObj = parseQuestionToObject(item);
 					if (queue.length !== 15) {
 						queue.push(questionObj)
 					} else if (!questionExists(queue, questionObj) && newerThanNewest(queue[0], questionObj)) {
@@ -106,8 +102,8 @@ $(function() {
 						queue.pop();
 						newQuestionsCount++
 					}
-				})
-				queue.sort(sortByTimeStamp)
+				});
+				queue.sort(sortByTimeStamp);
 				resolve(newQuestionsCount)
 
 			} catch (e) {
@@ -143,7 +139,7 @@ $(function() {
 	const makeAPIcalls = () => {
 		// user.queryReputationChanges();
 		user.queryInbox();
-	}
+	};
 
 	function execute() {
 		getQuestionPage();
@@ -153,29 +149,31 @@ $(function() {
 		setTimeout(() => {execute()}, interval)
 	}
 
+	const init = () => {
+		process.stdout.write('Started querying Stackoverflow...\n');
+		execute()
+	};
+	
 	// 'Main'
 	if (user) {
 		process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
 		user.getToken()
 			.then(() => {
-				if (!user.token) {
-					noToken();
-				} else {
-					process.stdout.write(`API token for ${user.email} obtained successfully.\n`)
-					process.stdout.write(`Getting accountID for inbox/reputation queries...\n`)
-						.then(() => {
-					user.getId()
-							if (!user.accountID) {
-								process.stdout.write(`Could not get accountID. Inbox & reputation on-click events will not work.\n`)
-							} else {
-								process.stdout.write(`Done\n`)
-							}
-						})
-				}
-				execute()
+				if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not query inbox.`);
+				process.stdout.write(`API token for ${user.email} obtained successfully.\n`);
+				process.stdout.write(`Getting accountID for inbox queries...\n`);
+				user.getId()
+					.then(() => {
+						if (!user.accountID) throw new Error('Could not obtain account id');
+						process.stdout.write(`Done\n`)
+					})
+					.catch(e => {
+						process.stdout.write(`${e}. Inbox on-click events will not work.\n`)
+					})
 			})
-			.catch(e => noToken())
+			.catch(e => process.stdout.write(e))
+			.finally(() => init())
 	} else {
-		execute()
+		init()
 	}
-})
+});

@@ -45,7 +45,7 @@
         if (program.config)  {
 	        try {
 		        let config = yaml.safeLoad(fs.readFileSync(confPath));
-		        stackUser = config.username
+		        stackUser = config.username;
 		        stackPassword = config.password
 	        } catch (err) {
                 process.stdout.write(`${err}\r\n`);
@@ -60,10 +60,10 @@
         const stackInterval = program.interval,
             stackTags = program.tags;
 
-        $('#query-interval').text(stackInterval)
-        $('#tags').text(stackTags)
-        $('#username').text(stackUser)
-        $('#password').text(stackPassword)
+        $('#query-interval').text(stackInterval);
+        $('#tags').text(stackTags);
+        $('#username').text(stackUser);
+        $('#password').text(stackPassword);
 
         if (stackUser && stackPassword) {
 	        // Write the arguments to .yaml
