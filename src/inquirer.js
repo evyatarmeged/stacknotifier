@@ -1,9 +1,11 @@
-const Notifier = require(path.join(__dirname, 'js/notifier.js')),
-	User = require(path.join(__dirname, '/js/user.js')),
-	validator = require(path.join(__dirname, 'js/argval.js')),
+const Notifier = require(path.join(__dirname, '../notifier.js')),
+	User = require(path.join(__dirname, '../user.js')),
+	validator = require(path.join(__dirname, '../argval.js')),
 	baseUrl = 'https://stackoverflow.com/',
 	suffix = '?sort=newest&pageSize=15';
 
+
+let errFont = remote.getGlobal('errFont');
 
 let urlTagString = 'questions/tagged/';
 let user;
@@ -52,6 +54,18 @@ function parseQuestionToObject(item) {
 const newerThanNewest = (newest, current) => {
 	return current.ts > newest.ts
 };
+
+function stringifyTags(tags) {
+	let stringified = '';
+	if (!tags.includes('+')) {
+		stringified = `[${tags[0].toUpperCase()}${tags.slice(1)}]`
+	} else {
+		tags.split('+').forEach((tag) => {
+			stringified += `[${tag[0].toUpperCase()}${tag.slice(1)}]`
+		});
+	}
+	return stringified
+}
 
 // Flow
 $(function() {
@@ -148,32 +162,37 @@ $(function() {
 		}
 		setTimeout(() => {execute()}, interval)
 	}
-
-	const init = () => {
-		process.stdout.write('Started querying Stackoverflow...\n');
-		execute()
-	};
 	
 	// 'Main'
 	if (user) {
-		process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
-		user.getToken()
-			.then(() => {
-				if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not query inbox.`);
-				process.stdout.write(`API token for ${user.email} obtained successfully.\n`);
-				process.stdout.write(`Getting accountID for inbox queries...\n`);
-				user.getId()
+		try {
+			process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
+			user.getToken()
 					.then(() => {
-						if (!user.accountID) throw new Error('Could not obtain account id');
-						process.stdout.write(`Done\n`)
+						if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not query inbox.\r\n`);
+						process.stdout.write(`API token for ${user.email} obtained successfully.\n`);
+						process.stdout.write(`Getting accountID for inbox queries...\n`);
+						user.getId()
+								.then(() => {
+									if (!user.accountID) throw new Error('Could not obtain account id');
+									process.stdout.write(`Done\n`);
+									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} minutes\n`)
+									
+								})
+								.catch(e => {
+									process.stdout.write(`${errFont}${e}. Inbox on-click events will not work.\n`)
+								})
 					})
-					.catch(e => {
-						process.stdout.write(`${e}. Inbox on-click events will not work.\n`)
-					})
-			})
-			.catch(e => process.stdout.write(e))
-			.finally(() => init())
+					.catch(e => process.stdout.write(`${errFont}${e.toString()}`));
+			// No support for Promise.finally() even in electron 2.0.0 ¯\_(ツ)_/¯
+		} catch (e) {
+			console.error(`Error grabbing API credentials :\n${e}`);
+		} finally {
+			execute()
+		}
 	} else {
-		init()
+		
+		process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} minutes\r\n`);
+		execute()
 	}
 });

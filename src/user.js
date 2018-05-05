@@ -88,8 +88,7 @@ module.exports = class User {
 			})
 
 		} catch (e) {
-			// Throw notification that token was not obtained
-			this.notifier.errorNotify(`Error getting API token:\n${e}`)
+			process.stdout.write(`${e.toString()}\n`);
 		} finally {
 				await this.driver.quit();
 		}

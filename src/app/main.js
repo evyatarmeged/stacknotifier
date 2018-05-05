@@ -1,6 +1,9 @@
-const {app, Menu, BrowserWindow, Tray} = require('electron');
-const path = require('path');
-const url = require('url');
+const {app, Menu, BrowserWindow, Tray} = require('electron'),
+	url = require('url'),
+	path = require('path');
+
+
+global.errFont = '\x1b[31m';
 
 /* Keep a global reference of the window object, if you don't, the window will
 be closed automatically when the JavaScript object is garbage collected. */
@@ -9,7 +12,7 @@ let mainWindow;
 
 function runHeadless() {
 	mainWindow = new BrowserWindow({show: true, title: "Stack Notifier"});
-	tray = new Tray(path.join(__dirname, '../static/images/sof.png'));
+	tray = new Tray(path.join(__dirname, '../images/sof.png'));
 
 	mainWindow.loadURL(url.format({
 		pathname: path.join(__dirname, '../static/headless.html'),
@@ -30,9 +33,9 @@ function runHeadless() {
 
 function createWindow() {
 	let args = process.argv;
-	if (args.length <= 5 && (args[2] !== '--help' || args[2] !== '-h')) {
+	if (args.length <= 5 && (args[2] !== '--help' && args[2] !== '-h') && args[2] !== '--show-config') {
 		process.stdout.write(`Insufficient arguments. Run --help for more information\r\n`);
-		process.exit(1)
+		process.exit(0)
 	} else {
 		runHeadless(args)
 	}
