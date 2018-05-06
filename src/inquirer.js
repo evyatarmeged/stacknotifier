@@ -5,7 +5,8 @@ const Notifier = require(path.join(__dirname, '../notifier.js')),
 	suffix = '?sort=newest&pageSize=15';
 
 
-let errFont = remote.getGlobal('errFont');
+let red = remote.getGlobal('red');
+let white = remote.getGlobal('white');
 
 let urlTagString = 'questions/tagged/';
 let user;
@@ -23,7 +24,7 @@ function assignVarArgs() {
 
 
 let [interval, tags, username, password] = assignVarArgs();
-
+let timeUnit = interval >=1 ? 'minutes' : 'minute';
 
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
@@ -176,14 +177,15 @@ $(function() {
 								.then(() => {
 									if (!user.accountID) throw new Error('Could not obtain account id');
 									process.stdout.write(`Done\n`);
-									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} minutes\n`)
+									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} \
+									${timeUnit}\n`)
 									
 								})
 								.catch(e => {
-									process.stdout.write(`${errFont}${e}. Inbox on-click events will not work.\n`)
+									process.stdout.write(`${red}${e}. Inbox on-click events will not work.${white}\r\n`)
 								})
 					})
-					.catch(e => process.stdout.write(`${errFont}${e.toString()}`));
+					.catch(e => process.stdout.write(`${red}${e.toString()}`));
 			// No support for Promise.finally() even in electron 2.0.0 ¯\_(ツ)_/¯
 		} catch (e) {
 			console.error(`Error grabbing API credentials :\n${e}`);
@@ -191,8 +193,7 @@ $(function() {
 			execute()
 		}
 	} else {
-		
-		process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} minutes\r\n`);
+		process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}\r\n`);
 		execute()
 	}
 });

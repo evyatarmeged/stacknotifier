@@ -4,16 +4,16 @@
   "description": "none atm",
   "main": "main.js",
   "scripts": {
-    "start": "./node_modules/electron/cli.js ./src/app/main.js",
+    "start": "node src/app/entry.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evyatar Meged",
   "license": "MIT",
   "dependencies": {
     "commander": "^2.14.1",
+    "electron": "^1.8.4",
     "geckodriver": "^1.11.0",
     "js-yaml": "^3.11.0",
-    "electron": "^1.8.4",
     "open": "0.0.5",
     "selenium-webdriver": "^3.6.0"
   }

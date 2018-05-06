@@ -56,7 +56,7 @@
 		        stackUser = config.username;
 		        stackPassword = config.password
 	        } catch (err) {
-                process.stdout.write(`${err}\r\n`);
+                process.stdout.write(`${remote.getGlobal('red')}${err}${remote.getGlobal('white')}\r\n`);
                 window.close();
                 process.exit(1)
 	        }
