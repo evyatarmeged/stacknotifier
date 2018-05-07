@@ -8,7 +8,6 @@ Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
 
 
 function credentialsValidation(username, password) {
-	process.stdout.write(username, password);
 	return new Promise((resolve, reject) => {
 		if (!(username && password)) {
 			reject(invalidCredentials)
