@@ -149,7 +149,7 @@ $(function() {
 	}
 
 	const makeAPIcalls = () => {
-		// user.queryReputationChanges();
+		user.queryReputationChanges();
 		user.queryInbox();
 	};
 
@@ -175,8 +175,7 @@ $(function() {
 									if (!user.accountID) throw new Error(`Could not obtain account id. \
 									Inbox on-click events will not work.`);
 									process.stdout.write(`Done\n`);
-									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} \
-									${timeUnit}\n`)
+									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}\n`)
 									
 								})
 								.catch(e => {

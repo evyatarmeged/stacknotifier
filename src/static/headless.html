@@ -45,7 +45,7 @@
 
         if (program.showConfig) {
         	if (!fs.existsSync(confPath)) {
-        	    process.stdout.write('Stack notifier never ran with -u and -p flags. No config to show.\r\n');
+        	    process.stdout.write('Never ran with -u and -p flags before. No config to show.\r\n');
             } else {
                 let config = yaml.safeLoad(fs.readFileSync(confPath));
                 process.stdout.write(`Username: ${config.username}\r\nPassword: ${config.password}\r\n`);
@@ -86,6 +86,7 @@
     </script>
     <img id="sof" src="../images/sof.png" hidden>
     <img id="msg" src="../images/msg.png" hidden>
+    <img id="trophy" src="../images/trophy.png" hidden>
     <script src="../inquirer.js"></script>
 </body>
 </html>

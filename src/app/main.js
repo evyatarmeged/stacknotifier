@@ -11,7 +11,7 @@ let tray = null;
 let mainWindow;
 
 function runHeadless() {
-	mainWindow = new BrowserWindow({show: true, title: "Stack Overflow Notifier"});
+	mainWindow = new BrowserWindow({show: false, title: "Stack Overflow Notifier"});
 	tray = new Tray(path.join(__dirname, '../images/sof.png'));
 
 	mainWindow.loadURL(url.format({
