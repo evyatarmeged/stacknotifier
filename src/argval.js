@@ -1,7 +1,4 @@
-const remote = require('electron').remote,
-		red = remote.getGlobal('red'),
-		white = remote.getGlobal('white'),
-		invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
+const invalidQueryInterval = `Invalid query interval parameter. Specify a number between 0.5 and 60`,
 	invalidTags = `Tags must be comma separated, valid Stackoverflow tags.
 Not sure about your tag ? look it up here: https://stackoverflow.com/tags`,
 	invalidCredentials = `Username or Password are missing or invalid`;
@@ -17,9 +14,9 @@ function credentialsValidation(username, password) {
 }
 
 function invalidArguments(err) {
-	process.stdout.write(`${red}${err}${white}\r\n`);
-	window.close();
-	process.exit(1)
+	process.stdout.write(`${err}\r\n`);
+	// window.close();
+	// process.exit(1)
 }
 
 

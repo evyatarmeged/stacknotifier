@@ -1,8 +1,11 @@
 {
-  "name": "sof_something",
-  "version": "1.0.0",
-  "description": "none atm",
-  "main": "main.js",
+  "name": "Stack Overflow Notifier",
+  "version": "1.0.3",
+  "description": "A cross-platform desktop application for Stack Overflow addicts",
+  "main": "index.js",
+  "bin": {
+    "stacknotifier": "src/app/main.js"
+  },
   "scripts": {
     "start": "electron src/app/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"

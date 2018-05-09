@@ -26,12 +26,12 @@
 	    program
             .version('0.1.1')
             .option('-i, --interval <n>',
-              'Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5')
+              'Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5')
             .option('-t, --tags [tags]',
 	            'Comma separated tags to filter questions by. Must match tags from the SOF tag list.')
             // Optional
-            .option('-u, --username [username]', 'Stackoverflow (Google) Username or Email')
-            .option('-p, --password [password]', 'Stackoverflow (Google) Password')
+            .option('-u, --username [username]', 'Stack Overflow (Google) Username or Email')
+            .option('-p, --password [password]', 'Stack Overflow (Google) Password')
             .option('-c, --config', 'Use username and password from when last specified. Saved in config.yaml')
             .option('--show-config', 'Show saved username and password')
             .on('--help', () => {
@@ -40,23 +40,27 @@
             })
             .parse(args);
 
-
         let confPath = path.join(__dirname, '../../config.yaml');
         let stackUser, stackPassword;
 
         if (program.showConfig) {
-	        let config = yaml.safeLoad(fs.readFileSync(confPath));
-	        process.stdout.write(`Username: ${config.username}\r\nPassword: ${config.password}\r\n`);
+        	if (!fs.existsSync(confPath)) {
+        	    process.stdout.write('Stack notifier never ran with -u and -p flags. No config to show.\r\n');
+            } else {
+                let config = yaml.safeLoad(fs.readFileSync(confPath));
+                process.stdout.write(`Username: ${config.username}\r\nPassword: ${config.password}\r\n`);
+            }
 	        window.close();
 	        process.exit(0)
         }
+
         if (program.config)  {
 	        try {
 		        let config = yaml.safeLoad(fs.readFileSync(confPath));
 		        stackUser = config.username;
 		        stackPassword = config.password
 	        } catch (err) {
-                process.stdout.write(`${remote.getGlobal('red')}${err}${remote.getGlobal('white')}\r\n`);
+                process.stdout.write(`${err}\r\n`);
                 window.close();
                 process.exit(1)
 	        }

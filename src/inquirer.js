@@ -5,9 +5,6 @@ const Notifier = require(path.join(__dirname, '../notifier.js')),
 	suffix = '?sort=newest&pageSize=15';
 
 
-let red = remote.getGlobal('red');
-let white = remote.getGlobal('white');
-
 let urlTagString = 'questions/tagged/';
 let user;
 
@@ -175,17 +172,18 @@ $(function() {
 						process.stdout.write(`Getting accountID for inbox queries...\n`);
 						user.getId()
 								.then(() => {
-									if (!user.accountID) throw new Error('Could not obtain account id');
+									if (!user.accountID) throw new Error(`Could not obtain account id. \
+									Inbox on-click events will not work.`);
 									process.stdout.write(`Done\n`);
 									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} \
 									${timeUnit}\n`)
 									
 								})
 								.catch(e => {
-									process.stdout.write(`${red}${e}. Inbox on-click events will not work.${white}\r\n`)
+									process.stdout.write(`${e}\r\n`)
 								})
 					})
-					.catch(e => process.stdout.write(`${red}${e.toString()}`));
+					.catch(e => process.stdout.write(`${e.toString()}`));
 			// No support for Promise.finally() even in electron 2.0.0 ¯\_(ツ)_/¯
 		} catch (e) {
 			console.error(`Error grabbing API credentials :\n${e}`);
