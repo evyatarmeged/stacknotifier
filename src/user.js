@@ -80,6 +80,7 @@ module.exports = class User {
 					authWindow = window
 				}
 			});
+
 			await this._driver.switchTo().window(authWindow);
 			this._waitForElementAndExecute(googleCss);
 			this._waitForElementAndExecute(userInputCss, this.email);
@@ -126,8 +127,6 @@ module.exports = class User {
 
 	_parseInboxResults(results) {
 		let totalMessages = results.items.length;
-		// TODO: remove after reputation changes are implemented
-		console.log(results.items[0]['reputation_change']);
 		// Test for new msgs
 		if (totalMessages !== 0) {
 			if (totalMessages > 1) {

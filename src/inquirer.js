@@ -167,13 +167,13 @@ $(function() {
 			process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
 			user.getToken()
 					.then(() => {
-						if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not query inbox.\r\n`);
+						if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not perform API calls.\r\n`);
 						process.stdout.write(`API token for ${user.email} obtained successfully.\n`);
-						process.stdout.write(`Getting accountID for inbox queries...\n`);
+						process.stdout.write(`Extracting accountID...\n`);
 						user.getId()
 								.then(() => {
 									if (!user.accountID) throw new Error(`Could not obtain account id. \
-									Inbox on-click events will not work.`);
+									Inbox and reputation on-click events will not work.`);
 									process.stdout.write(`Done\n`);
 									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}\n`)
 									

@@ -22,10 +22,12 @@ module.exports = class Notifier {
 	};
 
 	notifyQuestion(question) {
-		new Notification(`${question.title}\r\n`, {
-			body: `${question.body}\r\n\r\nAsked by: ${question.asker}\r\n${Notifier.getDateTimeFromTimestamp(question.ts)}`,
+		let notif = new Notification(question.title, {
+			body: `${question.body}\r\nAsked by: ${question.asker}\r\n${Notifier.getDateTimeFromTimestamp(question.ts)}`,
 			icon: $('#sof').attr('src'),
-		}).onclick = event => {
+		})
+		console.log(notif)
+		notif.onclick = event => {
 			event.preventDefault();
 			open(question.url)
 		};
@@ -33,7 +35,7 @@ module.exports = class Notifier {
 
 	notifyInboxMsg(content, quota) {
 		new Notification("Unread Inbox Message\r\n", {
-			body: `Title: ${content.title}\r\n\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
+			body: `Title: ${content.title}\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
 			// Goto msg URL
@@ -54,9 +56,9 @@ module.exports = class Notifier {
 		}
 	}
 	
-	notifyReputationChange(repURL) {
+	notifyReputationChange(quota, repURL) {
 		new Notification(`New reputation changes\r\n`, {
-			body: `Remaining API Quota: ${quota}\r\n\r\n`,
+			body: `Remaining API Quota: ${quota}\r\n`,
 			icon: $('#trophy').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
