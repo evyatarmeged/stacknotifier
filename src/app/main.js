@@ -2,8 +2,18 @@
 
 const {app, Menu, BrowserWindow, Tray} = require('electron'),
 	url = require('url'),
-	path = require('path');
+	path = require('path'),
+	yaml = require('js-yaml'),
+	fs = require('fs');
 
+
+const help = `-i, --interval <n>         Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5
+-t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
+-u, --username [username]  Stack Overflow (Google) Username or Email
+-p, --password [password]  Stack Overflow (Google) Password
+-c, --config               Use username and password from when last specified. Saved in config.yaml
+--show-config              Show saved username and password
+-h, --help                 output usage information\r\n`;
 
 /* Keep a global reference of the window object, if you don't, the window will
 be closed automatically when the JavaScript object is garbage collected. */
@@ -37,7 +47,26 @@ function createWindow() {
 		process.stdout.write(`Insufficient arguments. Run --help for more information\r\n`);
 		process.exit(0)
 	} else {
-		runHeadless(args)
+		// noinspection FallThroughInSwitchStatementJS
+		switch (args[2]) {
+			case "--help":
+			case "-h":
+				process.stdout.write(help);
+				process.exit(0);
+				
+			case "--show-config":
+				let confPath = '../../../config.yaml';
+				if (!fs.existsSync(confPath)) {
+					process.stdout.write('Never ran with -u and -p flags before. No config to show.\r\n');
+				} else {
+					let config = yaml.safeLoad(fs.readFileSync(confPath));
+					process.stdout.write(`Username: ${config.username}\r\nPassword: ${config.password}\r\n`);
+				}
+				process.exit(0);
+				
+			default:
+				runHeadless(args);
+		}
 	}
 }
 
