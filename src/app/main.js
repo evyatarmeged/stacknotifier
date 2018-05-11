@@ -4,8 +4,10 @@ const {app, Menu, BrowserWindow, Tray} = require('electron'),
 	url = require('url'),
 	path = require('path'),
 	yaml = require('js-yaml'),
-	fs = require('fs');
+	fs = require('fs'),
+	os = require('os');
 
+global.EOL = os.EOL;
 
 const help = `-i, --interval <n>         Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5
 -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
@@ -21,7 +23,7 @@ let tray = null;
 let mainWindow;
 
 function runHeadless() {
-	mainWindow = new BrowserWindow({show: false, title: "Stack Overflow Notifier"});
+	mainWindow = new BrowserWindow({show: true, title: "Stack Overflow Notifier"});
 	tray = new Tray(path.join(__dirname, '../images/sof.png'));
 
 	mainWindow.loadURL(url.format({

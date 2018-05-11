@@ -1,2 +1,2 @@
 # Stack Overflow Notifier
-> A cross-platform desktop application for Stack Overflow addicts
+> A cross-platform command line application for Stack Overflow addicts

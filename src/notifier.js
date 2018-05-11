@@ -1,17 +1,19 @@
-const open = require('open');
+const open = require('open'),
+		EOL = remote.getGlobal('EOL');
 
+console.log(EOL);
 
 module.exports = class Notifier {
-
+	
 	static getDateTimeFromTimestamp(unixTimeStamp) {
 		let date = new Date(unixTimeStamp);
 		return ('0' + date.getDate()).slice(-2) +
-			'/' + ('0' + (date.getMonth() + 1)).slice(-2) +
-			'/' + date.getFullYear() + ' ' +
-			('0' + date.getHours()).slice(-2) + ':' +
-			('0' + date.getMinutes()).slice(-2);
+				'/' + ('0' + (date.getMonth() + 1)).slice(-2) +
+				'/' + date.getFullYear() + ' ' +
+				('0' + date.getHours()).slice(-2) + ':' +
+				('0' + date.getMinutes()).slice(-2);
 	};
-
+	
 	notifyMultipleQuestions(n, url) {
 		new Notification(`Got ${n} new questions.`, {
 			icon: $('#sof').attr('src')
@@ -20,20 +22,20 @@ module.exports = class Notifier {
 			open(url)
 		}
 	};
-
+	
 	notifyQuestion(question) {
 		new Notification(question.title, {
-			body: `${question.body}\r\nAsked by: ${question.asker}\r\n${Notifier.getDateTimeFromTimestamp(question.ts)}`,
+			body: `${question.body}${EOL}Asked by: ${question.asker}${EOL}${Notifier.getDateTimeFromTimestamp(question.ts)}`,
 			icon: $('#sof').attr('src'),
 		}).onclick = event => {
 			event.preventDefault();
 			open(question.url)
 		};
 	}
-
+	
 	notifyInboxMsg(content, quota) {
-		new Notification("Unread Inbox Message\r\n", {
-			body: `Title: ${content.title}\r\nType: ${content.item_type}\r\nRemaining API Quota: ${quota}`,
+		new Notification(`Unread Inbox Message${EOL}`, {
+			body: `Title: ${content.title}${EOL}Type: ${content.item_type}${EOL}Remaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
 			// Goto msg URL
@@ -41,9 +43,9 @@ module.exports = class Notifier {
 			open(content.link)
 		}
 	}
-
+	
 	notifyMultipleMsgs(n, quota, inboxURL) {
-		new Notification(`Got ${n} Unread Inbox Messages\r\n`, {
+		new Notification(`Got ${n} Unread Inbox Messages${EOL}`, {
 			body: `Remaining API Quota: ${quota}`,
 			icon: $('#msg').attr('src')
 		}).onclick = event => {
@@ -55,8 +57,8 @@ module.exports = class Notifier {
 	}
 	
 	notifyReputationChange(quota, repURL) {
-		new Notification(`New reputation changes\r\n`, {
-			body: `Remaining API Quota: ${quota}\r\n`,
+		new Notification(`New reputation changes${EOL}`, {
+			body: `Remaining API Quota: ${quota}${EOL}`,
 			icon: $('#trophy').attr('src')
 		}).onclick = event => {
 			event.preventDefault();
@@ -66,6 +68,6 @@ module.exports = class Notifier {
 		}
 	}
 	errorNotify(msg) {
-		new Notification('Stack Overflow Notifier has encountered an error\r\n', {body:msg})
+		new Notification('Stack Overflow Notifier has encountered an error${EOL}', {body:msg})
 	};
 };

@@ -1,27 +1,31 @@
 const Notifier = require(path.join(__dirname, '../notifier.js')),
-	User = require(path.join(__dirname, '../user.js')),
-	validator = require(path.join(__dirname, '../argval.js')),
-	baseUrl = 'https://stackoverflow.com/',
-	suffix = '?sort=newest&pageSize=15';
+		User = require(path.join(__dirname, '../user.js')),
+		validator = require(path.join(__dirname, '../argval.js')),
+		baseUrl = 'https://stackoverflow.com/',
+		suffix = '?sort=newest&pageSize=15';
 
+const EOL = remote.getGlobal('EOL');
 
 let urlTagString = 'questions/tagged/';
 let user;
 
 function assignVarArgs() {
 	let interval, tags, username, password;
-
+	
 	interval = $('#query-interval').text();
 	tags = $('#tags').text().toLowerCase();
 	username = $('#username').text();
 	password = $('#password').text();
-
-	return [interval, tags, username, password]
+	token = $('#token').text();
+	
+	return [interval, tags, username, password, token]
 }
 
+let [interval, tags, username, password, token] = assignVarArgs();
+let timeUnit = interval >= 1 ? 'minutes' : 'minute';
 
-let [interval, tags, username, password] = assignVarArgs();
-let timeUnit = interval >=1 ? 'minutes' : 'minute';
+// URL encode C# and friends
+tags = tags.replace(/#/g, '%23');
 
 const sortByTimeStamp = (a,b) => {
 	if (a.ts < b.ts) {
@@ -67,44 +71,42 @@ function stringifyTags(tags) {
 
 // Flow
 $(function() {
-
+	
 	validator.validateRequired(interval, tags);
-
+	
 	if (username && password) {
 		validator.validateOptional(username, password)
 	}
-
+	
 	$.fn.reverse = [].reverse;
-
+	
 	interval *= 60000;
 	tags = tags.replace(/,/g, '+');
 	urlTagString += tags;
-
-	/* Deal with trailing comma breaking the script
+	
+	/* Deals with trailing comma breaking the script
 	 e.g tag: Java, would cause a urlTagString of questions/tagged/java+ <-- this would get no results
   */
 	if (urlTagString.endsWith('+')) {
 		let pos = urlTagString.lastIndexOf('+');
 		urlTagString = `${urlTagString.substring(0, pos)}${urlTagString.substring(pos+1)}`
 	}
-
+	
 	let completeUrl = baseUrl + urlTagString + suffix,
-		queue = [];
-
+			queue = [];
+	
 	const notifier = new Notifier();
 	if (username && password) {
 		user = new User(username, password, notifier);
 	}
-
-
-
+	
 	function getNewBatch(page) {
 		return new Promise((resolve, reject) => {
 			try {
 				let $page = $(page),
-					questions = $page.find('.question-summary'),
-					newQuestionsCount = 0;
-
+						questions = $page.find('.question-summary'),
+						newQuestionsCount = 0;
+				
 				questions.reverse().each((_, item) => {
 					let questionObj = parseQuestionToObject(item);
 					if (queue.length !== 15) {
@@ -117,13 +119,13 @@ $(function() {
 				});
 				queue.sort(sortByTimeStamp);
 				resolve(newQuestionsCount)
-
+				
 			} catch (e) {
 				reject(e)
 			}
 		})
 	}
-
+	
 	function getQuestionPage() {
 		// Life is good without CORS
 		$.ajax({
@@ -131,28 +133,28 @@ $(function() {
 			url: completeUrl,
 			success: page => {
 				getNewBatch(page)
-					.then((result) => {
-						if (result > 0) {
-							result > 1 ? notifier.notifyMultipleQuestions(result, completeUrl) : notifier.notifyQuestion(queue[0])
-						}
-					})
-					.catch((err) => {
-						console.error(err)
-					})
+						.then((result) => {
+							if (result > 0) {
+								result > 1 ? notifier.notifyMultipleQuestions(result, completeUrl) : notifier.notifyQuestion(queue[0])
+							}
+						})
+						.catch((err) => {
+							console.error(err)
+						})
 			},
 			error: err => {
 				let $err = $(err.responseText),
-					status = err.status;
-				notifier.errorNotify(status + '\r\n' + $err[1].text)
+						status = err.status;
+				notifier.errorNotify(`${status}${EOL}${$err[1].text}`)
 			}
 		})
 	}
-
+	
 	const makeAPIcalls = () => {
 		user.queryReputationChanges();
 		user.queryInbox();
 	};
-
+	
 	function execute() {
 		getQuestionPage();
 		if (user && user.token) {
@@ -164,33 +166,32 @@ $(function() {
 	// 'Main'
 	if (user) {
 		try {
-			process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds\n`);
+			process.stdout.write(`Trying to get token for ${user.email}. This may take a few seconds${EOL}`);
 			user.getToken()
 					.then(() => {
-						if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not perform API calls.\r\n`);
-						process.stdout.write(`API token for ${user.email} obtained successfully.\n`);
-						process.stdout.write(`Extracting accountID...\n`);
+						if (!user.token) throw new Error(`Could not obtain token for ${user.email}. Will not perform API calls.${EOL}`);
+						process.stdout.write(`API token for ${user.email} obtained successfully.${EOL}`);
+						process.stdout.write(`Extracting accountID...${EOL}`);
 						user.getId()
 								.then(() => {
 									if (!user.accountID) throw new Error(`Could not obtain account id. \
 									Inbox and reputation on-click events will not work.`);
-									process.stdout.write(`Done\n`);
-									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}\n`)
-									
+									process.stdout.write(`Done${EOL}`);
+									process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}${EOL}`)
 								})
 								.catch(e => {
-									process.stdout.write(`${e}\r\n`)
+									process.stdout.write(`${e}${EOL}`)
 								})
 					})
 					.catch(e => process.stdout.write(`${e.toString()}`));
 			// No support for Promise.finally() even in electron 2.0.0 ¯\_(ツ)_/¯
 		} catch (e) {
-			console.error(`Error grabbing API credentials :\n${e}`);
+			console.error(`Error grabbing API credentials :${EOL}${e}`);
 		} finally {
 			execute()
 		}
 	} else {
-		process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}\r\n`);
+		process.stdout.write(`Fetching ${stringifyTags(tags)} questions every ${interval / 60000} ${timeUnit}${EOL}`);
 		execute()
 	}
 });

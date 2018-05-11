@@ -72,7 +72,7 @@ path
 pagination
 javascript
 java
-c#
+c%23
 php
 android
 python
@@ -491,7 +491,7 @@ svn
 visual-c++
 design-patterns
 android-activity
-c#-4.0
+c%23-4.0
 core-data
 activerecord
 serialization
@@ -767,7 +767,7 @@ permissions
 outlook
 oauth-2.0
 java-8
-f#
+f%23
 three.js
 cmake
 stl
@@ -1636,7 +1636,7 @@ google-compute-engine
 classloader
 excel-2007
 octave
-c#-3.0
+c%23-3.0
 rounding
 sequence
 struts
@@ -2646,7 +2646,7 @@ clojurescript
 node-modules
 gesture
 iis-8
-c#-2.0
+c%23-2.0
 google-spreadsheet-api
 sendgrid
 gfortran
@@ -2893,7 +2893,7 @@ react-jsx
 scaling
 send
 titanium-mobile
-facebook-c#-sdk
+facebook-c%23-sdk
 github-pages
 hybrid-mobile-app
 parallax
@@ -5246,7 +5246,7 @@ temporary-files
 cllocation
 buddypress
 skphysicsbody
-gtk#
+gtk%23
 google-drive-android-api
 dnx
 fold
@@ -5744,7 +5744,7 @@ typo3-6.2.x
 text-classification
 logstash-configuration
 splunk
-c#-5.0
+c%23-5.0
 apache-beam
 reddit
 rvalue-reference
@@ -6244,7 +6244,7 @@ moose
 interrupt-handling
 google-places
 compareto
-c#-6.0
+c%23-6.0
 android-videoview
 bios
 administration
@@ -6773,7 +6773,7 @@ marathon
 mojolicious
 uitextfielddelegate
 att
-pkcs#11
+pkcs%2311
 notation
 divide
 leaderboard

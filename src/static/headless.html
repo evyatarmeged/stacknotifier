@@ -34,7 +34,7 @@
             .parse(args);
 
         let confPath = path.join(__dirname, '../../config.yaml');
-        let stackUser, stackPassword;
+        let stackUser, stackPassword, stackToken;
 
         if (program.showConfig) {
 
@@ -45,8 +45,9 @@
 		        let config = yaml.safeLoad(fs.readFileSync(confPath));
 		        stackUser = config.username;
 		        stackPassword = config.password
+                stackToken = config.token
 	        } catch (err) {
-                process.stdout.write(`${err}\r\n`);
+                process.stdout.write(`${err}${remote.getGlobal('EOL')}`);
                 window.close();
                 process.exit(1)
 	        }
@@ -62,6 +63,7 @@
         $('#tags').text(stackTags);
         $('#username').text(stackUser);
         $('#password').text(stackPassword);
+        $('#token').text(stackToken);
 
         if (stackUser && stackPassword) {
 	        // Write the arguments to .yaml
