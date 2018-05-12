@@ -9,7 +9,7 @@ const os = require('os')
 
 global.EOL = os.EOL
 
-const help = `-i, --interval <n>         Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5
+const help = `-i, --interval <n>         Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5
 -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
 -u, --username [username]  Stack Overflow (Google) Username or Email
 -p, --password [password]  Stack Overflow (Google) Password

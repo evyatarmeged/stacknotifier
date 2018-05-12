@@ -49,7 +49,7 @@ stacknotifier -i 2 -t javascript,node.js,electron
 ```
 ##### Available Flags 
 ```
--i, --interval <n>         Interval in minutes to query Stackoverflow for new questions. max: 60, min: 0.5
+-i, --interval <n>         Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5
 -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
 -u, --username [username]  Stack Overflow (Google) Username or Email
 -p, --password [password]  Stack Overflow (Google) Password
@@ -61,10 +61,11 @@ stacknotifier -i 2 -t javascript,node.js,electron
 ## A Word on Linux and Electron
 I started Stack Overflow Notifier as a command line tool but after realizing Ubuntu's notification center
 cannot respond to on-click events, I have thrown Electron in the mix as well.<br>
-I started designing a basic GUI version along with the CLI version but had to stop 
-due to lack of time. I will hopefully get back to it in the near future.<br>
+Designing a basic electron GUI version along with the CLI version seemed obvious but I had to stop 
+due to lack of time and will hopefully get back to it in the near future.<br>
 
-Currently using Ubuntu 18.04, notification on-click should work out of the box. Not sure about another distributions.<br>
+Currently tested on Ubuntu 18.04, notifications on-click work out of the box. Not sure about another distributions,
+but seems like it should work ootb as well.<br> 
 To enable on-click in Ubuntu 16.04 I had to switch from the default `notify-osd` and I
 have found [this workaround](https://askubuntu.com/a/239928) which offers a working alternative.
 

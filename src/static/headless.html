@@ -15,62 +15,63 @@
     <div id="driver" hidden></div>
     <script>
 
-	    const remote = require('electron').remote
-        const args = remote.process.argv
-        const program = require('commander')
-        const fs = require('fs')
-        const yaml = require('js-yaml')
-        const path = require('path')
-        const EOL = remote.getGlobal('EOL')
+      const remote = require('electron').remote
+      const args = remote.process.argv
+      const program = require('commander')
+      const fs = require('fs')
+      const yaml = require('js-yaml')
+      const path = require('path')
+      const EOL = remote.getGlobal('EOL')
 
-	    program
-            .version('0.1.1')
-            .option('-i, --interval <n>')
-            .option('-t, --tags [tags]')
-            // Optional
-            .option('-u, --username [username]')
-            .option('-p, --password [password]')
-            .option('-c, --config')
-            .option('--show-config')
-            .parse(args);
+      program
+        .version('0.1.1')
+        .option('-i, --interval <n>')
+        .option('-t, --tags [tags]')
+        // Optional
+        .option('-u, --username [username]')
+        .option('-p, --password [password]')
+        .option('-c, --config')
+        .option('--show-config')
+        .parse(args)
 
-        let confPath = path.join(__dirname, '../../config.yaml');
-        let stackUser, stackPassword, stackToken;
+      let confPath = path.join(__dirname, '../../config.yaml')
+      let stackUser, stackPassword, stackToken
 
-        if (program.showConfig) {
+      if (program.showConfig) {
 
+      }
+
+      if (program.config) {
+        try {
+          let config = yaml.safeLoad(fs.readFileSync(confPath))
+          stackUser = config.username
+          stackPassword = config.password
+          stackToken = config.token
+        } catch (err) {
+          process.stdout.write(`${err}${EOL}`)
+          window.close()
+          process.exit(1)
         }
+      } else {
+        stackUser = program.username
+        stackPassword = program.password
+      }
 
-        if (program.config)  {
-	        try {
-		        let config = yaml.safeLoad(fs.readFileSync(confPath));
-		        stackUser = config.username;
-		        stackPassword = config.password
-                stackToken = config.token
-	        } catch (err) {
-                process.stdout.write(`${err}${EOL}`);
-                window.close();
-                process.exit(1)
-	        }
-        } else {
-            stackUser = program.username;
-            stackPassword = program.password;
-        }
+      let stackInterval = program.interval
+      let stackTags = program.tags
 
-        let stackInterval = program.interval
-        let stackTags = program.tags
-
-        // TODO: Don't overwrite token if used from config.
-        if (program.username && program.password) {
-	        // Write the arguments to .yaml
-          try {
-            fs.writeFileSync(confPath,
-              yaml.safeDump({username: stackUser, password: stackPassword}))
-          } catch (e) {
-            if (e instanceof Error) process.stdout.write(`Error saving config to ${confPath}: Permission Denied.\
+      if (program.username && program.password) {
+        // Write the arguments to .yaml
+        try {
+          fs.writeFileSync(confPath,
+            yaml.safeDump({username: stackUser, password: stackPassword}))
+        } catch (e) {
+          if (e instanceof Error) {
+            process.stdout.write(`Error saving config to ${confPath}: Permission Denied.\
             ${EOL}Try running with sudo${EOL}`)
           }
         }
+      }
 
     </script>
     <img id="sof" src="../images/sof.png" hidden>
