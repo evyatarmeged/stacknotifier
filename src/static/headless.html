@@ -15,12 +15,13 @@
     <div id="driver" hidden></div>
     <script>
 
-	    const remote = require('electron').remote,
-            args = remote.process.argv,
-            program = require('commander'),
-            fs = require('fs'),
-            yaml = require('js-yaml'),
-            path = require('path');
+	    const remote = require('electron').remote
+        const args = remote.process.argv
+        const program = require('commander')
+        const fs = require('fs')
+        const yaml = require('js-yaml')
+        const path = require('path')
+        const EOL = remote.getGlobal('EOL')
 
 	    program
             .version('0.1.1')
@@ -47,7 +48,7 @@
 		        stackPassword = config.password
                 stackToken = config.token
 	        } catch (err) {
-                process.stdout.write(`${err}${remote.getGlobal('EOL')}`);
+                process.stdout.write(`${err}${EOL}`);
                 window.close();
                 process.exit(1)
 	        }
@@ -56,19 +57,19 @@
             stackPassword = program.password;
         }
 
-        const stackInterval = program.interval,
-            stackTags = program.tags;
+        let stackInterval = program.interval
+        let stackTags = program.tags
 
-        $('#query-interval').text(stackInterval);
-        $('#tags').text(stackTags);
-        $('#username').text(stackUser);
-        $('#password').text(stackPassword);
-        $('#token').text(stackToken);
-
-        if (stackUser && stackPassword) {
+        // TODO: Don't overwrite token if used from config.
+        if (program.username && program.password) {
 	        // Write the arguments to .yaml
-	        fs.writeFileSync(confPath,
-		        yaml.safeDump({username: stackUser, password: stackPassword}))
+          try {
+            fs.writeFileSync(confPath,
+              yaml.safeDump({username: stackUser, password: stackPassword}))
+          } catch (e) {
+            if (e instanceof Error) process.stdout.write(`Error saving config to ${confPath}: Permission Denied.\
+            ${EOL}Try running with sudo${EOL}`)
+          }
         }
 
     </script>

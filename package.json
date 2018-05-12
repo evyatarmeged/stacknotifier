@@ -1,6 +1,6 @@
 {
-  "name": "eranhtesting2",
-  "version": "1.0.3",
+  "name": "stacknotifier",
+  "version": "0.0.1",
   "description": "A cross-platform desktop application for Stack Overflow addicts",
   "main": "index.js",
   "bin": {
@@ -8,8 +8,14 @@
   },
   "scripts": {
     "start": "electron src/app/main.js",
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/evyatarmeged/Stack-Overflow-Notifier.git"
+  },
+  "keywords": ["stackoverflow", "cross-platform", "electron", "notifier", "notifications", "commad-line",
+  "selenium", "questions", "stack", "overflow", "cli"],
   "author": "Evyatar Meged",
   "license": "MIT",
   "dependencies": {
