@@ -1,6 +1,6 @@
 {
   "name": "stacknotifier",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A cross-platform desktop application for Stack Overflow addicts",
   "main": "index.js",
   "bin": {

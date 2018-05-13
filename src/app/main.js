@@ -9,13 +9,16 @@ const os = require('os')
 
 global.EOL = os.EOL
 
-const help = `-i, --interval <n>         Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5
--t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
--u, --username [username]  Stack Overflow (Google) Username or Email
--p, --password [password]  Stack Overflow (Google) Password
--c, --config               Use username and password from when last specified. Saved in config.yaml
---show-config              Show saved username and password
--h, --help                 output usage information\r\n`
+const help = `Usage: stacknotifier [-i interval] [-t tags] [OPTIONAL]
+
+Options:
+  -i, --interval <n>         Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5
+  -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
+  -u, --username [username]  Stack Overflow (Google) Username or Email
+  -p, --password [password]  Stack Overflow (Google) Password
+  -c, --config               Use username and password from when last specified. Saved in config.yaml
+  --show-config              Show saved username and password
+  -h, --help                 output usage information\r\n`
 
 /* Keep a global reference of the window object, if you don't, the window will
 be closed automatically when the JavaScript object is garbage collected. */

@@ -1,5 +1,5 @@
 # Stack Overflow Notifier
-> A cross-platform command line application for Stack Overflow addicts
+> #### A cross-platform command line application for Stack Overflow addicts
 
 ### Linux
 ![lin1](https://i.imgur.com/UAeInyK.png)
@@ -49,6 +49,9 @@ stacknotifier -i 2 -t javascript,node.js,electron
 ```
 ##### Available Flags 
 ```
+Usage: stacknotifier [-i interval] [-t tags] [OPTIONAL]
+
+Options:
 -i, --interval <n>         Interval in minutes to query Stack Overflow for new questions. max: 60, min: 0.5
 -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
 -u, --username [username]  Stack Overflow (Google) Username or Email
