@@ -16,8 +16,8 @@ Options:
   -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
   -u, --username [username]  Stack Overflow (Google) Username or Email
   -p, --password [password]  Stack Overflow (Google) Password
-  -c, --config               Load/save credentials from this path. If config file path is not supplied,
-                             will try to save to default config file in the stacknotifier folder. File format should be YAML.
+  -c, --config   [config]    Load/save credentials from this path. If config file path is not supplied, \
+will try to save to default config file in the stacknotifier folder. File format should be YAML.
   --show-config              Show saved username and password
   -h, --help                 output usage information\r\n`
 
@@ -27,7 +27,7 @@ let tray = null
 let mainWindow
 
 function runHeadless () {
-  mainWindow = new BrowserWindow({show: true, title: 'Stack Overflow Notifier'})
+  mainWindow = new BrowserWindow({show: false, title: 'Stack Overflow Notifier'})
   tray = new Tray(path.join(__dirname, '../images/tray.png'))
 
   mainWindow.loadURL(url.format({
