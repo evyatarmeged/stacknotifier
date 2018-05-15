@@ -30,23 +30,25 @@
         // Optional
         .option('-u, --username [username]')
         .option('-p, --password [password]')
-        .option('-c, --config')
+        .option('-c, --config [config]')
         .option('--show-config')
         .parse(args)
 
-      let confPath = path.join(__dirname, '../../config.yaml')
+
+      // Use the config path argument or a default one
+      let confPath = typeof program.config === 'boolean' ?
+        path.join(__dirname, '../../config.yaml') : program.config
+
       let stackUser, stackPassword, stackToken
 
-      if (program.showConfig) {
-
-      }
-
-      if (program.config) {
+      if (program.config && !(program.username && program.password)) {
         try {
           let config = yaml.safeLoad(fs.readFileSync(confPath))
-          stackUser = config.username
-          stackPassword = config.password
-          stackToken = config.token
+          if (config) {
+            stackUser = config.username
+            stackPassword = config.password
+            stackToken = config.token
+          }
         } catch (err) {
           process.stdout.write(`${err}${EOL}`)
           window.close()

@@ -13,7 +13,7 @@
 ![win2](https://image.ibb.co/jZWE5d/rsz_1spring_boot.png)
 
 ### Mac
-TBU
+![mac]()
 
 ## Features
 * Get **notifications** about new questions, inbox messages and reputation changes
@@ -40,8 +40,10 @@ Run `stacknotifier` with the mandatory `-i` and `-t` for query interval and tags
 All tags provided should be present in order for a question to match, so chaining many tags will
 not yield many results.<br>
 Specifying `username` and `password` should ideally be done only once, and they should be loaded
-from the package's config.yaml with the `--config` flag onwards.<br> Stack Overflow Notifier will
-also try to re-use the previously obtained API token (up to 24h at the moment) for faster init time.
+from the package's config.yaml with the `--config` flag onwards.<br>
+If `--config` is called without arguments, stacknotifier will try to save/load a config.yaml in the stacknotifier folder,
+else, it will look in the provided path.
+Stack Overflow Notifier will try to re-use the previously obtained API token (up to 24h at the moment) for faster init time. 
 
 ##### Example
 ```
@@ -57,7 +59,8 @@ Options:
 -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
 -u, --username [username]  Stack Overflow (Google) Username or Email
 -p, --password [password]  Stack Overflow (Google) Password
--c, --config               Use username and password from when last specified. Saved in config.yaml
+-c, --config               Use username and password from when last specified. If config file is not supplied,
+    will try to save in a config.yaml in the stacknotifier folder
 --show-config              Show saved username and password
 -h, --help                 output usage information
 ```
