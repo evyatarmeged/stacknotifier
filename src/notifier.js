@@ -54,12 +54,13 @@ module.exports = class Notifier {
     }
   }
 
-  notifyReputationChange (quota, repURL) {
+  notifyReputationChange (quota, repURL, user) {
     new Notification(`New reputation changes${EOL}`, {
       body: `Remaining API Quota: ${quota}${EOL}`,
       icon: $('#trophy').attr('src')
     }).onclick = event => {
       event.preventDefault()
+      user._repAlerts = 0
       if (repURL) {
         open(repURL)
       }

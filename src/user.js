@@ -18,6 +18,7 @@ module.exports = class User {
     this._problemNotified = false
     this._exchangeBaseUrl = null
     this._lastRepChange = null
+    this._repAlerts = 0
   }
 
   _getDriver () {
@@ -145,9 +146,15 @@ module.exports = class User {
     let lastChange = results.items[0]['on_date']
     if (!this._lastRepChange) {
       this._lastRepChange = lastChange
+      
+    } else if (this._repAlerts > 0 ) {
+      this._repAlerts >= 3 ? this._repAlerts = 0 : this._repAlerts += 1
+      this._notifier.notifyReputationChange(results.quota_remaining, `${this._exchangeBaseUrl}reputation`, this)
+      
     } else if (this._lastRepChange !== lastChange) {
+      this._repAlerts += 1
       this._lastRepChange = lastChange
-      this._notifier.notifyReputationChange(results.quota_remaining, `${this._exchangeBaseUrl}reputation`)
+      this._notifier.notifyReputationChange(results.quota_remaining, `${this._exchangeBaseUrl}reputation`, this)
     }
   }
 }
