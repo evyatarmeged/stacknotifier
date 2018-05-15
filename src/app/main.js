@@ -16,8 +16,8 @@ Options:
   -t, --tags [tags]          Comma separated tags to filter questions by. Must match tags from the SOF tag list.
   -u, --username [username]  Stack Overflow (Google) Username or Email
   -p, --password [password]  Stack Overflow (Google) Password
-  -c, --config               Use username and password from when last specified. If config file is not supplied,
-   will try to save in a config.yaml in the stacknotifier folder
+  -c, --config               Load/save credentials from this path. If config file path is not supplied,
+                             will try to save to default config file in the stacknotifier folder. File format should be YAML.
   --show-config              Show saved username and password
   -h, --help                 output usage information\r\n`
 
