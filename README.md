@@ -10,7 +10,7 @@
 
 ![win1](https://image.ibb.co/iMChrJ/index.png)
 
-![win2](https://image.ibb.co/jZWE5d/rsz_1spring_boot.png)
+![win2](https://image.ibb.co/joSMBJ/win2.png)
 
 ### Mac
 ![mac](https://image.ibb.co/fQsgQd/mac.jpg)
