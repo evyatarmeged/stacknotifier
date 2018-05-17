@@ -50,7 +50,7 @@ function runHeadless () {
 }
 
 function createWindow () {
-  process.title = "Stack Overflow Notifier"
+  process.title = "StackNotifier"
   let args = process.argv
   if (args.length <= 5 && (args[2] !== '--help' && args[2] !== '-h') && args[2] !== '--show-config') {
     process.stdout.write(`Insufficient arguments. Run --help for more information${global.EOL}`)

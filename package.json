@@ -11,11 +11,22 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/evyatarmeged/Stack-Overflow-Notifier.git"
+    "type": "git",
+    "url": "https://github.com/evyatarmeged/Stack-Overflow-Notifier.git"
   },
-  "keywords": ["stackoverflow", "cross-platform", "electron", "notifier", "notifications", "commad-line",
-  "selenium", "questions", "stack", "overflow", "cli"],
+  "keywords": [
+    "stackoverflow",
+    "cross-platform",
+    "electron",
+    "notifier",
+    "notifications",
+    "commad-line",
+    "selenium",
+    "questions",
+    "stack",
+    "overflow",
+    "cli"
+  ],
   "author": "Evyatar Meged",
   "license": "MIT",
   "dependencies": {
