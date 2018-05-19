@@ -24,7 +24,6 @@ module.exports = class User {
   // Must use async/await or 1st inbox query won't open as accountID will be null still
   async _assignId (accountId) {
     this.accountID = await accountId
-    this.exchangeBaseUrl = await `https://stackexchange.com/users/${this.accountID}?tab=`
   }
 
   getId () {

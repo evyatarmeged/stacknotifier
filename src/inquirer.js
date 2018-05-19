@@ -144,17 +144,13 @@ $(function () {
   }
   
   const makeAPIcalls = () => {
-    console.log(apiCalls._repUrl)
-    console.log(apiCalls._inboxURL)
-    console.log(apiCalls._exchangeBaseUrl)
-    console.log(user.accountID)
     apiCalls.queryReputationChanges()
     apiCalls.queryInbox()
   }
   
   function execute () {
     getQuestionPage()
-    if (user && user.token) {
+    if (apiCalls) {
       makeAPIcalls()
     }
     setTimeout(() => { execute() }, stackInterval)
@@ -167,7 +163,19 @@ $(function () {
     try {
       if (stackToken && isTokenValid(stackToken)) {
         user.token = stackToken
-        write(`Last obtained token still valid. Using it${EOL}${initStr}${EOL}`)
+        user.getId()
+          .then(() => {
+            if (!user.accountID) {
+              throw new Error(`Could not obtain account id. \
+                Inbox and reputation on-click events will not work.`)
+            }
+            apiCalls = new APICalls(notifier, user)
+            write(`Last obtained token still valid. Using it${EOL}${initStr}${EOL}`)
+  
+          })
+          .catch(e => {
+            write(`${e}${EOL}`)
+          })
       } else {
           write(`Trying to get new token for ${user.email}. This may take a few seconds${EOL}`)
           user.getToken()
@@ -192,6 +200,7 @@ $(function () {
                 throw new Error(`Could not obtain account id. \
                 Inbox and reputation on-click events will not work.`)
               }
+              apiCalls = new APICalls(notifier, user)
               write(`Done.${EOL}${initStr}${EOL}`)
             })
             .catch(e => {
@@ -205,14 +214,11 @@ $(function () {
     } catch (e) {
       console.error(`Error grabbing API credentials :${EOL}${e}`)
     } finally {
-      // TODO: Add async/await for user.token before creating an APICalls instance
-      apiCalls = new APICalls(user, notifier)
       execute()
     }
   
   } else {
     write(`${initStr}${EOL}`)
-    apiCalls = new APICalls(user, notifier)
     execute()
   }
 })
