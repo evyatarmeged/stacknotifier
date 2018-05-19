@@ -1,12 +1,13 @@
 const Notifier = require(path.join(__dirname, '../notifier.js'))
 const User = require(path.join(__dirname, '../user.js'))
+const APICalls = require(path.join(__dirname, '../apicalls.js'))
 const validator = require(path.join(__dirname, '../argval.js'))
 const baseUrl = 'https://stackoverflow.com/'
 const suffix = '?sort=newest&pageSize=15'
 
 let urlTagString = 'questions/tagged/'
 let user
-
+let apiCalls
 let timeUnit = stackInterval > 1 ? 'minutes' : 'minute'
 
 // URL encode C# and friends
@@ -79,7 +80,7 @@ $(function () {
   
   const notifier = new Notifier()
   if (stackUser && stackPassword) {
-    user = new User(stackUser, stackPassword, notifier)
+    user = new User(stackUser, stackPassword)
   }
   
   function isTokenValid() {
@@ -143,8 +144,12 @@ $(function () {
   }
   
   const makeAPIcalls = () => {
-    user.queryReputationChanges()
-    user.queryInbox()
+    console.log(apiCalls._repUrl)
+    console.log(apiCalls._inboxURL)
+    console.log(apiCalls._exchangeBaseUrl)
+    console.log(user.accountID)
+    apiCalls.queryReputationChanges()
+    apiCalls.queryInbox()
   }
   
   function execute () {
@@ -162,7 +167,6 @@ $(function () {
     try {
       if (stackToken && isTokenValid(stackToken)) {
         user.token = stackToken
-        user.tokenizeUrls();
         write(`Last obtained token still valid. Using it${EOL}${initStr}${EOL}`)
       } else {
           write(`Trying to get new token for ${user.email}. This may take a few seconds${EOL}`)
@@ -201,10 +205,14 @@ $(function () {
     } catch (e) {
       console.error(`Error grabbing API credentials :${EOL}${e}`)
     } finally {
+      // TODO: Add async/await for user.token before creating an APICalls instance
+      apiCalls = new APICalls(user, notifier)
       execute()
     }
+  
   } else {
     write(`${initStr}${EOL}`)
+    apiCalls = new APICalls(user, notifier)
     execute()
   }
 })
