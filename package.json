@@ -1,6 +1,6 @@
 {
   "name": "stacknotifier",
-  "version": "0.1.2",
+  "version": "0.2.2",
   "description": "A cross-platform desktop application for Stack Overflow addicts",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/evyatarmeged/Stack-Overflow-Notifier.git"
+    "url": "https://github.com/evyatarmeged/stacknotifier"
   },
   "keywords": [
     "stackoverflow",
@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.14.1",
-    "electron": "^1.8.4",
+    "electron": "^1.8.6",
     "geckodriver": "^1.11.0",
     "js-yaml": "^3.11.0",
     "open": "0.0.5",
